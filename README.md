@@ -1,3 +1,5 @@
+[Desistalação](#desinstala%C3%A7%C3%A3o)
+
 ### O que é o projeto.
 O projeto "MOIP Transparente", foi criado para facilitar a compra para o usuário final. O projeto quando instalado tem a função de tornar a compra mais fácil pois ele 'elimina' o famoso 'redirecionamento'.
 Vantagens
@@ -103,11 +105,11 @@ Se a quantidade mínima de parcelas for igual em mais de uma configuração, pre
 Se houver duas configurações com quantidade de parcelas iguais, o sistema vai configurar aleatoriamente, garantindo que não haja erro na transação.
 
 ### Desinstalação.
-1 - Acesse: [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0).
-2 - Clique em Desinstalar.
-3 - Faça seu login.
-4 - Confirme que deseja desinstalar o módulo.
-5 - Pronto! O Módulo foi desinstalado com sucesso.
+* 1 - Acesse: [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0).
+* 2 - Clique em Desinstalar.
+* 3 - Faça seu login.
+* 4 - Confirme que deseja desinstalar o módulo.
+* 5 - Pronto! O Módulo foi desinstalado com sucesso.
 
 Agradecimentos.
 Muito Obrigado a todos.
