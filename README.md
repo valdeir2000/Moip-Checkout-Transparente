@@ -1,12 +1,12 @@
-[O que é o projeto](#o-que-%C3%A9-o-projeto)
-[Requisitos](#requisitos)
-[Instalação](#instala%C3%A7%C3%A3o)
-[Atualização](#atualiza%C3%A7%C3%A3o-da-vers%C3%A3o-free-para-vers%C3%A3o-pro)
-[Token e Key](#token-e-key-de-produ%C3%A7%C3%A3o)
-[Configuração Básica](#configura%C3%A7%C3%A3o-b%C3%A1sica)
-[Parcelas](#parcelas)
-[Desinstalação](#desinstala%C3%A7%C3%A3o)
-[Para Outras Versões](#para-outras-versoes)
+* [O que é o projeto](#o-que-%C3%A9-o-projeto)
+* [Requisitos](#requisitos)
+* [Instalação](#instala%C3%A7%C3%A3o)
+* [Atualização](#atualiza%C3%A7%C3%A3o-da-vers%C3%A3o-free-para-vers%C3%A3o-pro)
+* [Token e Key](#token-e-key-de-produ%C3%A7%C3%A3o)
+* [Configuração Básica](#configura%C3%A7%C3%A3o-b%C3%A1sica)
+* [Parcelas](#parcelas)
+* [Desinstalação](#desinstala%C3%A7%C3%A3o)
+* [Para Outras Versões](#para-outras-versoes)
 
 ### O que é o projeto.
 O projeto "MOIP Transparente", foi criado para facilitar a compra para o usuário final. O projeto quando instalado tem a função de tornar a compra mais fácil pois ele 'elimina' o famoso 'redirecionamento'.
