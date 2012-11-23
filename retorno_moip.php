@@ -79,21 +79,21 @@ if (!empty($id_transacao->row)) {
 	endif;
 	
 	if (empty($_POST['cartao_final'])):
-		$cartaoBin = 'Indefinido';
+		$cartaoFinal = 'Indefinido';
 	else:
-		$cartaoBin = $_POST['cartao_final'];
+		$cartaoFinal = $_POST['cartao_final'];
 	endif;
 	
 	if (empty($_POST['cartao_bandeira'])):
-		$cartaoBin = 'Indefinido';
+		$cartaoBandeira = 'Indefinido';
 	else:
-		$cartaoBin = $_POST['cartao_bandeira'];
+		$cartaoBandeira = $_POST['cartao_bandeira'];
 	endif;
 	
 	if (empty($_POST['cofre'])):
-		$cartaoBin = 'Indefinido';
+		$cartaoCofre = 'Indefinido';
 	else:
-		$cartaoBin = $_POST['cofre'];
+		$cartaoCofre = $_POST['cofre'];
 	endif;
 	
 	//Caso não exista o id recebido pelo moip na tabela moip_nasp, inseri os dados recebidos do moip na tabela moip_nasp
@@ -119,10 +119,10 @@ if (!empty($id_transacao->row)) {
 				'" . $_POST['tipo_pagamento'] . "', 
 				'" . $_POST['parcelas'] . "', 
 				'" . $_POST['email_consumidor'] . "', 
-				'" . $_POST['cartao_bin'] . "', 
-				'" . $_POST['cartao_final'] . "', 
-				'" . $_POST['cartao_bandeira'] . "', 
-				'" . $_POST['cofre'] . "');");
+				'" . $cartaoBin . "', 
+				'" . $cartaoFinal . "', 
+				'" . $cartaoBandeira . "', 
+				'" . $cartaoCofre . "');");
 }
 
 
