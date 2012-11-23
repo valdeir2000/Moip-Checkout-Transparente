@@ -71,6 +71,31 @@ switch ($_POST['status_pagamento']) {
 if (!empty($id_transacao->row)) {
 	$db->query('UPDATE ' . DB_PREFIX . 'moip_nasp SET status_pagamento="' . $status . '" WHERE id_transacao = "' . $_POST['id_transacao'] . '"');
 }else{
+
+	if (empty($_POST['cartao_bin'])):
+		$cartaoBin = 'Indefinido';
+	else:
+		$cartaoBin = $_POST['cartao_bin'];
+	endif;
+	
+	if (empty($_POST['cartao_final'])):
+		$cartaoBin = 'Indefinido';
+	else:
+		$cartaoBin = $_POST['cartao_final'];
+	endif;
+	
+	if (empty($_POST['cartao_bandeira'])):
+		$cartaoBin = 'Indefinido';
+	else:
+		$cartaoBin = $_POST['cartao_bandeira'];
+	endif;
+	
+	if (empty($_POST['cofre'])):
+		$cartaoBin = 'Indefinido';
+	else:
+		$cartaoBin = $_POST['cofre'];
+	endif;
+	
 	//Caso não exista o id recebido pelo moip na tabela moip_nasp, inseri os dados recebidos do moip na tabela moip_nasp
 	$db->query("INSERT INTO `" . DB_PREFIX . "moip_nasp` (
 				`id_transacao`, 
