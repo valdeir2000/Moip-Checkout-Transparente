@@ -31,7 +31,7 @@ class ModelPaymentMoip extends Model {
   	}
 	
 	public function salvarCartao($dados) {
-		$sql = "INSERT INTO `". DB_PREFIX ."cartaocredito` 
+		$sql = "INSERT INTO `cartaocredito` 
 															(
 															`customer_id`, 
 															`bandeiraCartao`, 

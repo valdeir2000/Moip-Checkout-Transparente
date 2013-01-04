@@ -71,7 +71,6 @@ switch ($_POST['status_pagamento']) {
 if (!empty($id_transacao->row)) {
 	$db->query('UPDATE ' . DB_PREFIX . 'moip_nasp SET status_pagamento="' . $status . '" WHERE id_transacao = "' . $_POST['id_transacao'] . '"');
 }else{
-
 	if (empty($_POST['cartao_bin'])):
 		$cartaoBin = 'Indefinido';
 	else:
@@ -102,10 +101,10 @@ if (!empty($id_transacao->row)) {
 				`valor`, 
 				`status_pagamento`, 
 				`cod_moip`, 
-				`forma_pagamento`, 
 				`tipo_pagamento`, 
-				`email_consumidor`, 
+				`forma_pagamento`, 
 				`parcelas`, 
+				`email_consumidor`, 
 				`cartao_bin`, 
 				`cartao_final`, 
 				`cartao_bandeira`, 
@@ -115,8 +114,8 @@ if (!empty($id_transacao->row)) {
 				'" . $_POST['valor'] . "', 
 				'" . $_POST['status_pagamento'] . "', 
 				'" . $_POST['cod_moip'] . "', 
-				'" . $_POST['forma_pagamento'] . "', 
 				'" . $_POST['tipo_pagamento'] . "', 
+				'" . $_POST['forma_pagamento'] . "', 
 				'" . $_POST['parcelas'] . "', 
 				'" . $_POST['email_consumidor'] . "', 
 				'" . $cartaoBin . "', 

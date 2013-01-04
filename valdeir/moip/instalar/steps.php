@@ -196,6 +196,11 @@
 			<?php endif; ?>
 			
 			<!--------------->
+			<!--  Success  -->
+			<!--------------->
+			<div class="warning">Basta preencher apenas 1 vez.</div>
+			
+			<!--------------->
 			<!--   Title   -->
 			<!--------------->
             <h1>MoIP Checkout Transparente | Valdeir S.</h1>
@@ -644,6 +649,14 @@
     </body>
 	<script><!--
 		var module_row = 1;
+		
+		$('select[name="moip_pagadorTaxa"]').change(function (){
+			if ($(this).val() == 'afiliado') {
+				$('input[name="moip_loginMoip"]').hide();
+			}else{
+				$('input[name="moip_loginMoip"]').show();
+			}
+		});
 		
 		function addParcela() {
 			
