@@ -78,13 +78,20 @@
 				  `codCartao` varchar(1000) NOT NULL,
 				  `nascimentoTitular` varchar(1000) NOT NULL,
 				  `telefoneTitular` varchar(1000) NOT NULL,
-				  `CPFTitular` varchar(11000) NOT NULL,
+				  `CPFTitular` varchar(1000) NOT NULL,
 				  PRIMARY KEY (`id_cartaoCredito`)
 				) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;");
 		$db->query("INSERT INTO " . DB_PREFIX . "extension SET `type` = 'payment', `code` = 'moip'");
 		
 		//Captura todas configurações da loja
 		$config = $db->query('SELECT `key`,`value` FROM `' . DB_PREFIX . 'setting` WHERE  `group` = "config" OR `group` = "moip"');
+		
+		//Etapa 5
+		if (isset($_POST['stepFive']) && $_POST['stepFive'] == 1){
+			if (file_exists(DIR_SYSTEM . '../vqmod/xml/pular_etapa5_moip')){
+				rename(DIR_SYSTEM . '../vqmod/xml/pular_etapa5_moip', DIR_SYSTEM . '../vqmod/xml/pular_etapa5_moip.xml');
+			}
+		}
 		
 		//Captura as configurações de email para o envio
 		for ($i = 0;$i < count($config->rows);$i++) {
@@ -302,6 +309,17 @@
 									<option value="0">Não</option>
 								</select>
                             </p>
+							
+							<!------------------>
+							<!--   Etapa 5  -->
+							<!------------------>
+							<p>
+								<label for="stepFive">Deseja ocultar a etapa 5 (Método de Pagamento) do checkout?</label>
+								<select name="stepFive" id="stepFive">
+									<option value="1">Sim</option>
+									<option value="0">Não</option>
+								</select>
+							</p>
                         </fieldset>
 						
 						<!---------------->

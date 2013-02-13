@@ -198,7 +198,7 @@
 		/* Carrega o model moip */
 		$this->load->model('moip/moip');
 		
-		/* Verifica se o existe ou se est� vazio o par�metro, caso esteja redireciona */
+		/* Verifica se o existe ou se está vazio o parâmetro, caso esteja redireciona */
 		if (!isset($this->request->get['order_id']) || empty($this->request->get['order_id']))
 			$this->redirect($this->url->link('moip/moip&token=' . $this->session->data['token'] , '', 'SSL'));
 		
@@ -209,14 +209,22 @@
 		$this->data['data_order'] = $this->model_moip_moip->getOrder($order_id);
 		
 		/* Formata Moeda */
-		$this->data['data_order']['total'] = $this->currency->format($this->data['data_order']['currency_id'], $this->data['data_order']['currency_code'], $this->data['data_order']['total']);
+		$this->data['data_order']['total'] = $this->format_money($this->currency->format($this->data['data_order']['currency_id'], $this->data['data_order']['currency_code'], $this->data['data_order']['total']), 'R$');
 		
 		/* Captura o nome do grupo do cliente */
 		$this->data['data_order']['customer_group_name'] = $this->model_moip_moip->getCustomerGroup($this->data['data_order']['customer_group_id']);
 		
+		/* Status do pedido */
 		$this->data['data_order']['order_status_name'] = $this->model_moip_moip->getOrderStatus($this->data['data_order']['order_status_id']);
 		
+		/* Valor da Comissão */
 		$this->data['data_order']['commission'] = $this->currency->format($this->data['data_order']['currency_id'], $this->data['data_order']['currency_code'], $this->data['data_order']['commission']);
+		
+		/* Data de Criação do Pedido */
+		$this->data['data_order']['date_added'] = date($this->language->get('datetime'), strtotime($this->data['data_order']['date_added']));
+		
+		/* Data última modificação do pedido */
+		$this->data['data_order']['date_modified'] = date($this->language->get('datetime'), strtotime($this->data['data_order']['date_modified']));
 		
 		/* Captura os dados dos produtos da compra */
 		$this->data['data_products'] = $this->model_moip_moip->getOrderProducts($order_id);
@@ -224,7 +232,7 @@
 		/* Captura o sub-total, valor do frete e valor total */
 		$this->data['totals_order'] = $this->model_moip_moip->getOrderTotals($order_id);
 		
-		/* Captura todos os hist�ricos criado */
+		/* Captura todos os históricos criado */
 		$histories_order = $this->model_moip_moip->getOrderHistories($order_id,0,40);
 		
 		$this->data['histories_order'] = array();
@@ -243,18 +251,30 @@
 		/* Captura os dados da tabela moip_nasp e adiciona nas variaveis citadas abaixo */
 		$this->data['moip_order'] = $this->model_moip_moip->getMoipNasp($order_id);
 		
+		/* Id da Transação */
+		$this->data['moip_order']['id_transacao'] = isset($this->data['moip_order']['id_transacao']) ? $this->data['moip_order']['id_transacao'] : 'Nenhum dado foi retornado';
+		
 		/* Adiciona o simbolo R$ antes do valor */
-		$this->data['moip_order']['valor'] = 'R$'.$this->format_money($this->data['moip_order']['valor']);
+		$this->data['moip_order']['valor'] = isset($this->data['moip_order']['valor']) ? $this->format_money($this->data['moip_order']['valor'], 'R$') : 'Nenhum dado foi retornado';
 		
 		/* Captura o nome do status de pagamento atraves do ID */
-		$this->data['moip_order']['status_pagamento'] = $this->model_moip_moip->getStatusPaymentMoip($this->data['moip_order']['status_pagamento']);
+		$this->data['moip_order']['status_pagamento'] = isset($this->data['moip_order']['status_pagamento']) ? $this->model_moip_moip->getStatusPaymentMoip($this->data['moip_order']['status_pagamento']) : 'Nenhum dado foi retornado';
+		
+		/* Código MoIP */
+		$this->data['moip_order']['cod_moip'] = isset($this->data['cod_moip']['cod_moip']) ? $this->data['cod_moip']['cod_moip'] : 'Nenhum dado foi retornado';
+		
+		/* Tipo de Pagamento */
+		$this->data['moip_order']['tipo_pagamento'] = isset($this->data['moip_order']['tipo_pagamento']) ? $this->data['moip_order']['tipo_pagamento'] : 'Nenhum dado foi retornado';
+		
+		/* Parcelas */
+		$this->data['moip_order']['parcelas'] = isset($this->data['moip_order']['parcelas']) ? $this->data['moip_order']['parcelas'] : 'Nenhum dado foi retornado';
 		
 		/* Captaura o nome da forma de pagamento */
-		$this->data['moip_order']['forma_pagamento'] = $this->model_moip_moip->getFormaPagamento($this->data['moip_order']['forma_pagamento']);
+		$this->data['moip_order']['forma_pagamento'] = isset($this->data['moip_order']['forma_pagamento']) ? $this->model_moip_moip->getFormaPagamento($this->data['moip_order']['forma_pagamento']) : 'Nenhum dado foi retornado';
 		
-		/* Concatena os 6 primeiros e 4 �ltimos digitos do cart�o */
-		$this->data['moip_order']['num_cartao'] = $this->data['moip_order']['cartao_bin'].'.****.****.'.$this->data['moip_order']['cartao_final'];
-		
+		/* Concatena os 6 primeiros e 4 últimos digitos do cartão*/
+		$this->data['moip_order']['num_cartao'] = isset($this->data['moip_order']['cartao_bin']) ? $this->data['moip_order']['cartao_bin'].'.****.****.'.$this->data['moip_order']['cartao_final'] : 'Nenhum dado foi retornado';
+
 		/* Links */
 		$this->data['link_order_update'] = $this->url->link('sale/order/info&token=' . $this->session->data['token'] . '&order_id=' . $order_id, '', 'SSL');
 		$this->data['link_cancel'] = $this->url->link('moip/moip&token=' . $this->session->data['token'] . '&order_id=' . $order_id, '', 'SSL');
@@ -284,35 +304,15 @@
 		$this->response->setOutput($this->render());
 		
 	}
-	
-	public function teste() {
-		
-		$this->load->model('moip/moip');
-		
-		$resultado = $this->model_moip_moip->getOrder(9);
-		$resultado2 = $this->model_moip_moip->getOrderProducts(9);
-		
-		var_dump($resultado);
-		var_dump($resultado2);
-		
-		$this->template = 'moip/testes.tpl';
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-		
-		$this->response->setOutput($this->render());
-		
-	}
 
-	private function format_money($total){
-			if(strlen($total)>2){
-				$n=strlen($total)-2;
-				$preco=substr($total,0,$n).",".substr($total,$n);
-				return $preco;
-			}else{
-				return $total;
-			}
+	private function format_money($total, $simbolo = null){
+		//Verifica se a variável é do tipo inteiro ou real
+		if (is_numeric($total)):
+			return $simbolo . number_format($total, 2, ',', '.');
+		else:
+			//Caso não, remove todos caracteres com excessão de números, pontos e vírgulas
+			return $simbolo . number_format(str_replace(',', '.', preg_replace('/([^0-9.])/', '', $total)), 2, ',', '.');
+		endif;
 	}
 }
 ?>
