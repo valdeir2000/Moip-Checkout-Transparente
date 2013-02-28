@@ -25,7 +25,7 @@ Você pode ter um aumento de até 30% na conversão de suas vendas, uma vez que,
 Os dados de pagamento dos seus clientes são direcionados diretamente do navegador para o Moip. Sem passar por seus servidores, assim não precisa se preocupar com a segurança destas informações.
 
 ### Requisitos
-* **OpenCart:** 1.5.1, 1.5.1.3, 1.5.2.1, 1.5.3, 1.5.3.1, 1.5.4, 1.5.4.1
+* **OpenCart:** 1.5.1, 1.5.1.3, 1.5.2.1, 1.5.3, 1.5.3.1, 1.5.4, 1.5.4.1, 1.5.5.1
 * **VQmod:** Sim
 * **jQuery:** 1.7 ou superior
 * **ColorBox:** Sim
