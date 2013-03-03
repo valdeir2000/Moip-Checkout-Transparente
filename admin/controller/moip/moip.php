@@ -49,7 +49,7 @@
 			$filter_total = null;
 		endif;
 		
-		/* Verifica se existe um filtro de busca por data de adição */
+		/* Verifica se existe um filtro de busca por data de adiï¿½ï¿½o */
 		if (isset($this->request->get['filter_date_added'])):
 			$filter_date_added = $this->request->get['filter_date_added'];
 			$url .= '&filter_date_added='.$this->request->get['filter_date_added'];
@@ -57,7 +57,7 @@
 			$filter_date_added = null;
 		endif;
 		
-		/* Verifica se existe um filtro de busca por data de modificação */
+		/* Verifica se existe um filtro de busca por data de modificaï¿½ï¿½o */
 		if (isset($this->request->get['filter_date_modified'])):
 			$filter_date_modified = $this->request->get['filter_date_modified'];
 			$url .= '&filter_date_modified='.$this->request->get['filter_date_modified'];
@@ -65,7 +65,7 @@
 			$filter_date_modified = null;
 		endif;
 		
-		/* Verifica se existe um filtro de reogarnização por ordem Crescente ou Decrescente */
+		/* Verifica se existe um filtro de reogarnizaï¿½ï¿½o por ordem Crescente ou Decrescente */
 		if (isset($this->request->get['sort'])):
 			$sort = $this->request->get['sort'];
 			$url .= '&sort='.$this->request->get['sort'];
@@ -81,7 +81,7 @@
 			$order = null;
 		endif;
 		
-		/* Verifica em qual página o usuário está */
+		/* Verifica em qual pï¿½gina o usuï¿½rio estï¿½ */
 		if (isset($this->request->get['page'])):
 			$page = $this->request->get['page'];
 			$url .= '&page='.$this->request->get['page'];
@@ -89,7 +89,7 @@
 			$page = 1;
 		endif;
 		
-		/* Adiciona as váriaveis acima nas variaveis $this-data[] para ser exibido no arquivo moip_form.tpl */
+		/* Adiciona as vï¿½riaveis acima nas variaveis $this-data[] para ser exibido no arquivo moip_form.tpl */
 		$this->data['filter_order_id'] = $filter_order_id;
 		$this->data['filter_customer'] = $filter_customer;
 		$this->data['filter_status'] = $filter_order_status_id;
@@ -97,7 +97,7 @@
 		$this->data['filter_date_added'] = $filter_date_added;
 		$this->data['filter_date_modified'] = $filter_date_modified;
 		
-		/* Adiciona os valores das variaveis acima na variavél $data (variavel responsavel por filtrar os resultados) */
+		/* Adiciona os valores das variaveis acima na variavï¿½l $data (variavel responsavel por filtrar os resultados) */
 		$data = array(
 			'filter_order_id'        => $filter_order_id,
 			'filter_customer'	     => $filter_customer,
@@ -114,10 +114,10 @@
 		/* Carrega o model moi/moip */
 		$this->load->model('moip/moip');
 		
-		/* Carrega o model com as informações de status */
+		/* Carrega o model com as informaï¿½ï¿½es de status */
 		$this->load->model('localisation/order_status');
 		
-		/* Adiciona os informações de dados na variável */
+		/* Adiciona os informaï¿½ï¿½es de dados na variï¿½vel */
     	$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		/* Captura todas os pedidos com os filtros definidos mais acima */
@@ -149,7 +149,7 @@
 			
 		}
 		
-		/* Páginação */
+		/* Pï¿½ginaï¿½ï¿½o */
 		$pagination = new Pagination();
 		$pagination->total = $order_total;
 		$pagination->page = $page;
@@ -227,7 +227,21 @@
 		$this->data['data_order']['date_modified'] = date($this->language->get('datetime'), strtotime($this->data['data_order']['date_modified']));
 		
 		/* Captura os dados dos produtos da compra */
-		$this->data['data_products'] = $this->model_moip_moip->getOrderProducts($order_id);
+		$data_products = $this->model_moip_moip->getOrderProducts($order_id);
+		
+		foreach ($data_products as $data_product): 
+		
+		$this->data['data_products'][] = array(
+		
+			'name'     => $data_product['name'],
+			'model'    => $data_product['model'],
+			'quantity' => $data_product['quantity'],
+			'price'    => $this->currency->format($data_product['price']),
+			'total'    => $this->currency->format($data_product['total'])
+		
+		);
+		
+		endforeach;
 		
 		/* Captura o sub-total, valor do frete e valor total */
 		$this->data['totals_order'] = $this->model_moip_moip->getOrderTotals($order_id);
