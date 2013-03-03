@@ -16,7 +16,7 @@
 		<div class="box">
 			
 			<div class="heading">
-				<h1><img src="view/image/order.png" alt="" />Detalhes do Pedido #709</h1>
+				<h1><img src="view/image/order.png" alt="" />Detalhes do Pedido #<?php echo $data_order['order_id'] ?></h1>
 				<div class="buttons">
 					<a href="<?php echo $link_order_update; ?>" class="button">Atualizar Pedido</a>
 					<a href="<?php echo $link_cancel; ?>" class="button">Cancelar</a>
