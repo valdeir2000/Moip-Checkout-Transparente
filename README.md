@@ -37,7 +37,7 @@ Os dados de pagamento dos seus clientes são direcionados diretamente do navegad
 ### Instalação
 1. Extraia o arquivo moip.zip no seu computador.
 2. Copie as pastas "admin", "catalog", "image", "valdeir", "vqmod", "system" e o arquivo "retorno_moip.php" para a raiz de sua loja.
-3. Acesse [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0).
+3. Acesse [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0)).
 4. Clique em Instalar
 5. Faça seu login com o usuário e senha do admin.
 6. Preencha todos os dados
@@ -45,10 +45,10 @@ Os dados de pagamento dos seus clientes são direcionados diretamente do navegad
 ### Atualização da versão Free para versão Pro
 * 1 - Extraia o arquivo moip.zip no seu computador.
 * 2 - Copie as pastas "admin", "catalog", "image", "valdeir", "system" e o arquivo "retorno_moip.php" para a raiz de sua loja.
-* 3 - Acesse [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0).
+* 3 - Acesse [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0)).
 * 4 - Clique em atualizar.
 * 5 - Faça seu login com o usuário e senha do admin.
-* 6 - Acesse [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0).
+* 6 - Acesse [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0)).
 * 7 - Clique em Instalar
 * 8 - Faça seu login com o usuário e senha do admin.
 * 9 - Preencha todos os dados
@@ -62,16 +62,16 @@ Para receber o Token e Key de produção, seu site deverá ser homologado pela e
 
 ### Token e Key de Teste
 Para receber o Token e Key de produção, seu site deverá ser homologado pela equipe do MoiP para isso basta se cadastrar no site:
-* 1 - [http://labs.moip.com.br/login](javascript:void(0)).
+* 1 - http://labs.moip.com.br/login
 * 2 - Depois de cadastrado, faça seu login.
 * 3 - Acesse o menu Ferramentas > API MoiP > Chaves de Acesso.
 
 ### Retorno Automático
 Para seu cliente receber a notificação do status de pagamento automáticamente é necessário casdastrar sua url de retorno automático, para isso basta acessar:
-* 1 - [https://www.moip.com.br/](javascript:void(0))
+* 1 - https://www.moip.com.br/
 * 2 - Ir no menu Meus Dados > Preferências > Notificação das transações
 * 3 - Marcar a opção Receber notificação instantânea de transação
-* 4 - Cadastar sua url em URL de notificação (ex: http://www.SEUDOMINIO.com.br/retorno_moip.php).
+* 4 - Cadastar sua url em URL de notificação (ex: [http://www.SEUDOMINIO.com.br/retorno_moip.php](javascript:void(0))).
 * 5 - Clicar em Confirmar Alterações.
 
 ### Configuração Básica.
@@ -96,7 +96,7 @@ Para seu cliente receber a notificação do status de pagamento automáticamente
 ### Parcelas
 O módulo Moip Checkout Transparente Pro oferece total flexibilidade e transparência para você configurar as suas regras de parcelamento de acordo com a estratégia e necessidade do seu negócio.
 Para aceitar um pagamento parcelado com cartão de crédito você deverá acessar:
-* 1 - Acesse [http://www.SEUDOMINIO.com.br/admin/](javascript:void(0)
+* 1 - Acesse [http://www.SEUDOMINIO.com.br/admin/](javascript:void(0))
 * 2 - Acessar o menu Extensões > Pagamento > Clique em editar ao lado de MoIP > Logo após isso selecione a opção Parcelas (ao lado esquerdo)
 * 3 - Clique em Adicionar e define os valores de "De*", "Para**" e "Juros***"
 
@@ -118,14 +118,14 @@ Se a quantidade mínima de parcelas for igual em mais de uma configuração, pre
 Se houver duas configurações com quantidade de parcelas iguais, o sistema vai configurar aleatoriamente, garantindo que não haja erro na transação.
 
 ### Desinstalação.
-* 1 - Acesse: [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0).
+* 1 - Acesse: [http://www.SEUDOMINIO.com.br/valdeir/moip/](javascript:void(0)).
 * 2 - Clique em Desinstalar.
 * 3 - Faça seu login.
 * 4 - Confirme que deseja desinstalar o módulo.
 * 5 - Pronto! O Módulo foi desinstalado com sucesso.
 
 ### Para Outras Versoes
-[Acessar](https://www.dropbox.com/sh/l4u1y4t292agk3n/WtpXcc3vO8)
+[Clique aqui](https://www.dropbox.com/sh/l4u1y4t292agk3n/WtpXcc3vO8)
 
 Agradecimentos.
 Muito Obrigado a todos.
