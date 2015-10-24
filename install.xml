@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>MoiP Checkout Transparente</name>
+  <version>1.0</version>
+  <author>Valdeir Psr</author>
+  <link>http://www.valdeirsantana.com.br</link>
+  <code>valdeir_moip</code>
+  <file path="catalog/controller/checkout/checkout.php">
+    <operation>
+      <search><![CDATA[$this->load->language('checkout/checkout');]]></search>
+      <add position="after"><![CDATA[
+        //Verifica se está em modo de teste
+        if (!$this->config->get('moip_modo_teste')) {
+          $this->document->addScript('https://www.moip.com.br/transparente/MoipWidget-v2.js');
+        } else {
+          $this->document->addScript('https://desenvolvedor.moip.com.br/sandbox/transparente/MoipWidget-v2.js');
+        }
+      ]]></add>
+    </operation>
+  </file>
+</modification>
