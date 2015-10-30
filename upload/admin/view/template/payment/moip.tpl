@@ -6,8 +6,9 @@
 		<div class="container-fluid">
 		
 			<div class="pull-right">
-				<button type="submit" form="form-moip" data-toggle="tooltip" title="Save" class="btn btn-primary"><i class="fa fa-save"></i></button>
-				<a href="#" data-toggle="tooltip" title="Cancel" class="btn btn-default"><i class="fa fa-reply"></i></a>	
+				<button type="submit" form="form-moip" data-toggle="tooltip" title="<?php echo $button_save ?>" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="<?php echo $debug ?>" data-toggle="tooltip" title="<?php echo $button_debug ?>" class="btn btn-info"><i class="fa fa-file"></i></a>
+				<a href="<?php echo $cancel ?>" data-toggle="tooltip" title="<?php echo $button_cancel ?>" class="btn btn-default"><i class="fa fa-reply"></i></a>
 			</div>
 			
 			<h1><?php echo $heading_title ?></h1>
@@ -46,11 +47,10 @@
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#config"><?php echo $tab_config ?></a></li>
 					<li><a data-toggle="tab" href="#payment-status"><?php echo $tab_status_payment ?></a></li>
-					<li><a data-toggle="tab" href="#area"><?php echo $tab_geo_zone ?></a></li>
+					<li><a data-toggle="tab" href="#desconto"><?php echo $tab_desconto ?></a></li>
 					<li><a data-toggle="tab" href="#plots"><?php echo $tab_plots ?></a></li>
 					<li><a data-toggle="tab" href="#billet"><?php echo $tab_billet ?></a></li>
 					<li><a data-toggle="tab" href="#payment-method"><?php echo $tab_payment_method ?></a></li>
-					<li><a data-toggle="tab" href="#debug"><?php echo $tab_debug ?></a></li>
 				</ul>
 				
 				<!-- Form -->
@@ -131,24 +131,6 @@
 								</div>
 							</div>
 							
-							<!-- Debug -->
-							<div class="form-group required">
-								<label class="col-sm-2 control-label" for=""><?php echo $entry_debug ?></label>
-								<div class="col-sm-10">
-									<?php if ($moip_debug) { ?>
-									<label class="radio-inline"><input type="radio" name="moip_debug" value="1" checked /> <?php echo $text_yes ?></label>
-									<?php } else { ?>
-									<label class="radio-inline"><input type="radio" name="moip_debug" value="1" /> <?php echo $text_yes ?></label>
-									<?php } ?>
-									
-									<?php if (!$moip_debug) { ?>
-									<label class="radio-inline"><input type="radio" name="moip_debug" value="0" checked /> <?php echo $text_no ?></label>
-									<?php } else { ?>
-									<label class="radio-inline"><input type="radio" name="moip_debug" value="0" /> <?php echo $text_no ?></label>
-									<?php } ?>
-								</div>
-							</div>
-							
 							<!-- Notificar Cliente -->
 							<div class="form-group required">
 								<label class="col-sm-2 control-label"><?php echo $entry_notificar_cliente ?></label>
@@ -166,30 +148,32 @@
 									<?php } ?>
 								</div>
 							</div>
-							
-							<!-- Desconto Boleto -->
+              
+              <!-- Área/Zona Geográfica -->
 							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_desconto_boleto ?></label>
+								<label class="col-sm-2 control-label"><?php echo $entry_geo_zone ?></label>
 								<div class="col-sm-10">
-									<input class="form-control" name="moip_desconto_boleto" value="<?php echo $moip_desconto_boleto ?>" type="text" />
+									<select name="moip_geo_zone_id" class="form-control">
+										<option value="0"><?php echo $text_all_zones ?></option>
+										<?php foreach($zones as $zone) { ?>
+										<?php if ($moip_geo_zone_id == $zone['geo_zone_id']) { ?>
+										<option value="<?php echo $zone['geo_zone_id'] ?>"><?php echo $zone['name'] ?></option>
+										<?php } else { ?>
+										<option value="<?php echo $zone['geo_zone_id'] ?>"><?php echo $zone['name'] ?></option>
+										<?php } ?>
+										<?php } ?>
+									</select>
 								</div>
 							</div>
 							
-							<!-- Desconto Débito -->
+							<!-- Ordem -->
 							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_desconto_debito ?></label>
+								<label class="col-sm-2 control-label"><?php echo $entry_sort_order ?></label>
 								<div class="col-sm-10">
-									<input class="form-control" name="moip_desconto_debito" value="<?php echo $moip_desconto_debito ?>" type="text" />
+									<input type="text" name="moip_sort_order" value="<?php echo $moip_sort_order ?>" class="form-control" />
 								</div>
 							</div>
-							
-							<!-- Desconto Cartão de Crédito -->
-							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_desconto_cartao ?></label>
-								<div class="col-sm-10">
-									<input class="form-control" name="moip_desconto_cartao" value="<?php echo $moip_desconto_cartao ?>" type="text" />
-								</div>
-							</div>
+              
 						</div>
 						
 						<!-- Tab Status de Pagamento -->
@@ -341,30 +325,29 @@
 						</div>
 						
 						<!-- Tab Área Geográfica e Ordem -->
-						<div class="tab-pane" id="area">
+						<div class="tab-pane" id="desconto">
 							
-							<!-- Área/Zona Geográfica -->
+							<!-- Desconto Boleto -->
 							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_geo_zone ?></label>
+								<label class="col-sm-2 control-label"><?php echo $entry_desconto_boleto ?></label>
 								<div class="col-sm-10">
-									<select name="moip_geo_zone_id" class="form-control">
-										<option value="0"><?php echo $text_all_zones ?></option>
-										<?php foreach($zones as $zone) { ?>
-										<?php if ($moip_geo_zone_id == $zone['geo_zone_id']) { ?>
-										<option value="<?php echo $zone['geo_zone_id'] ?>"><?php echo $zone['name'] ?></option>
-										<?php } else { ?>
-										<option value="<?php echo $zone['geo_zone_id'] ?>"><?php echo $zone['name'] ?></option>
-										<?php } ?>
-										<?php } ?>
-									</select>
+									<input class="form-control" name="moip_desconto_boleto" value="<?php echo $moip_desconto_boleto ?>" type="text" />
 								</div>
 							</div>
 							
-							<!-- Ordem -->
+							<!-- Desconto Débito -->
 							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_sort_order ?></label>
+								<label class="col-sm-2 control-label"><?php echo $entry_desconto_debito ?></label>
 								<div class="col-sm-10">
-									<input type="text" name="moip_sort_order" value="<?php echo $moip_sort_order ?>" class="form-control" />
+									<input class="form-control" name="moip_desconto_debito" value="<?php echo $moip_desconto_debito ?>" type="text" />
+								</div>
+							</div>
+							
+							<!-- Desconto Cartão de Crédito -->
+							<div class="form-group">
+								<label class="col-sm-2 control-label"><?php echo $entry_desconto_cartao ?></label>
+								<div class="col-sm-10">
+									<input class="form-control" name="moip_desconto_cartao" value="<?php echo $moip_desconto_cartao ?>" type="text" />
 								</div>
 							</div>
 						</div>
@@ -538,21 +521,6 @@
 								</div>
 							</div>
 						</div>
-					
-            <!-- Tab Debug -->
-            <div class="tab-pane" id="debug">
-              <div class="alert alert-info">
-                https://labs.moip.com.br/playground/
-                <button class="close" data-dismiss="alert" type="button">&times;</button>
-              </div>
-              <div class="well" style="min-height:150px">
-                <?php
-                  foreach($debug as $value) {
-                    echo htmlspecialchars($value) . '<br/>';
-                  }
-                ?>
-              </div>
-            </div>
           </div>
 				</form>
 			</div>

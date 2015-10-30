@@ -3,6 +3,7 @@ class ControllerPaymentMoip extends Controller {
 	private $error = array();
 	
 	public function index() {
+		
 		/* Carrega Linguagem */
 		$data = $this->load->language('payment/moip');
 		
@@ -127,25 +128,18 @@ class ControllerPaymentMoip extends Controller {
 			$data['moip_notificar_cliente'] = $this->config->get('moip_notificar_cliente');
 		}
 		
-		/* Desconto Boleto */
-		if (isset($this->request->post['moip_desconto_boleto'])) {
-			$data['moip_desconto_boleto'] = $this->request->post['moip_desconto_boleto'];
+		/* Geo Zone */
+		if (isset($this->request->post['moip_geo_zone_id'])) {
+			$data['moip_geo_zone_id'] = $this->request->post['moip_geo_zone_id'];
 		} else {
-			$data['moip_desconto_boleto'] = $this->config->get('moip_desconto_boleto');
+			$data['moip_geo_zone_id'] = $this->config->get('moip_geo_zone_id');
 		}
 		
-		/* Desconto Débito */
-		if (isset($this->request->post['moip_desconto_debito'])) {
-			$data['moip_desconto_debito'] = $this->request->post['moip_desconto_debito'];
+		/* Sort Order / Ordem */
+		if (isset($this->request->post['moip_sort_order'])) {
+			$data['moip_sort_order'] = $this->request->post['moip_sort_order'];
 		} else {
-			$data['moip_desconto_debito'] = $this->config->get('moip_desconto_debito');
-		}
-		
-		/* Desconto Cartão de Crédito */
-		if (isset($this->request->post['moip_desconto_cartao'])) {
-			$data['moip_desconto_cartao'] = $this->request->post['moip_desconto_cartao'];
-		} else {
-			$data['moip_desconto_cartao'] = $this->config->get('moip_desconto_cartao');
+			$data['moip_sort_order'] = $this->config->get('moip_sort_order');
 		}
 		
 		/* Autorizado */
@@ -211,18 +205,25 @@ class ControllerPaymentMoip extends Controller {
 			$data['moip_reembolsado'] = $this->config->get('moip_reembolsado');
 		}
 		
-		/* Geo Zone */
-		if (isset($this->request->post['moip_geo_zone_id'])) {
-			$data['moip_geo_zone_id'] = $this->request->post['moip_geo_zone_id'];
+		/* Desconto Boleto */
+		if (isset($this->request->post['moip_desconto_boleto'])) {
+			$data['moip_desconto_boleto'] = $this->request->post['moip_desconto_boleto'];
 		} else {
-			$data['moip_geo_zone_id'] = $this->config->get('moip_geo_zone_id');
+			$data['moip_desconto_boleto'] = $this->config->get('moip_desconto_boleto');
 		}
 		
-		/* Sort Order / Ordem */
-		if (isset($this->request->post['moip_sort_order'])) {
-			$data['moip_sort_order'] = $this->request->post['moip_sort_order'];
+		/* Desconto Débito */
+		if (isset($this->request->post['moip_desconto_debito'])) {
+			$data['moip_desconto_debito'] = $this->request->post['moip_desconto_debito'];
 		} else {
-			$data['moip_sort_order'] = $this->config->get('moip_sort_order');
+			$data['moip_desconto_debito'] = $this->config->get('moip_desconto_debito');
+		}
+		
+		/* Desconto Cartão de Crédito */
+		if (isset($this->request->post['moip_desconto_cartao'])) {
+			$data['moip_desconto_cartao'] = $this->request->post['moip_desconto_cartao'];
+		} else {
+			$data['moip_desconto_cartao'] = $this->config->get('moip_desconto_cartao');
 		}
 		
 		/* Parcelas */
@@ -296,21 +297,9 @@ class ControllerPaymentMoip extends Controller {
 		/* Zonas Geográficas */
 		$data['zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
-		/* Debug */
-		if (file_exists(DIR_LOGS . 'moip.log')) {
-			if ((isset($this->request->post['moip_debug']) && $this->request->post['moip_debug'])) {
-				$data['debug'] = file(DIR_LOGS . 'moip.log');
-			} elseif ($this->config->get('moip_debug')) {
-				$data['debug'] = file(DIR_LOGS . 'moip.log');
-			} else {
-				$data['debug'] = array();
-			}
-		} else {
-			$data['debug'] = array();
-		}
-		
 		/* Links */
 		$data['action'] = $this->url->link('payment/moip', 'token=' . $this->session->data['token'], 'SSL');
+		$data['debug'] = $this->url->link('payment/moip/debug', 'token=' . $this->session->data['token'], 'SSL');
 		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
 		
 		$data['header'] = $this->load->controller('common/header');

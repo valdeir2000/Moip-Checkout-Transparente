@@ -5,7 +5,7 @@ $_['heading_title'] 			= 'MoIP';
 //Tab
 $_['tab_config'] 				= 'Config';
 $_['tab_status_payment'] 		= 'Status de Pagamento';
-$_['tab_geo_zone'] 				= 'Zona Geográfica';
+$_['tab_desconto'] 				= 'Desconto';
 $_['tab_plots'] 				= 'Parcelas';
 $_['tab_billet'] 				= 'Boleto';
 $_['tab_payment_method'] 		= 'Métodos de Pagamento';
@@ -14,6 +14,9 @@ $_['tab_debug'] 				= 'Debug';
 //Text
 $_['text_payment']				= 'Formas de Pagamento';
 $_['text_moip']		 			= '<img src="view/image/payment/moip.png" alt="MoIP" title="MoIP" style="border: 1px solid #EEEEEE;">';
+
+//Button
+$_['button_debug']              = 'Debug';
 
 //Entry
 $_['entry_status'] 				= 'Situação:';
