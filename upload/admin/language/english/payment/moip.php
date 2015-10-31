@@ -1,6 +1,7 @@
 <?php
 //Heading
 $_['heading_title'] 			= 'MoIP';
+$_['heading_title_debug'] 		= 'MoIP - Debug';
 
 //Tab
 $_['tab_config'] 				= 'Config';
@@ -14,9 +15,13 @@ $_['tab_debug'] 				= 'Debug';
 //Text
 $_['text_payment']				= 'Formas de Pagamento';
 $_['text_moip']		 			= '<img src="view/image/payment/moip.png" alt="MoIP" title="MoIP" style="border: 1px solid #EEEEEE;">';
+$_['text_debug_info']           = 'Execute seu teste no site <a href="https://labs.moip.com.br/playground/" target="_blank">https://labs.moip.com.br/playground/</a>';
 
 //Button
 $_['button_debug']              = 'Debug';
+$_['button_config']             = 'Configurações';
+$_['button_active']             = 'Ativar';
+$_['button_deactivate']         = 'Desativar';
 
 //Entry
 $_['entry_status'] 				= 'Situação:';

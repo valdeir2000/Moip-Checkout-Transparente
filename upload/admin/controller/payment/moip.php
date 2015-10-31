@@ -309,6 +309,117 @@ class ControllerPaymentMoip extends Controller {
 		$this->response->setOutput($this->load->view('payment/moip.tpl', $data));
 	}
 	
+    public function debug() {
+        
+        /* Carrega o idioma */
+        $data = $this->language->load('payment/moip');
+        
+        /* Define o <title></title> */
+        $this->document->setTitle($this->language->get('heading_title_debug'));
+        
+        /* Verifica se há requisições via POST */
+        if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+            
+            /* Verifica se o usuário tem permissão para modificar */
+            if ($this->user->hasPermission('modify', 'payment/moip')) {
+                $this->load->model('setting/setting');
+                
+                $this->model_setting_setting->editSetting('moip_debug', $this->request->post);
+                
+                $this->session->data['success'] = $this->language->get('text_success');
+            } else {
+                $this->session->data['error_warning'] = $this->language->get('warning');
+            }
+        }
+        
+        /* Sucesso */
+        if (isset($this->session->data['success'])) {
+            $data['success'] = $this->session->data['success'];
+            unset($this->session->data['success']);
+        } else {
+            $data['success'] = false;
+        }
+        
+        /* Erro */
+        if (isset($this->session->data['error_warning'])) {
+            $data['error_warning'] = $this->session->data['error_warning'];
+            unset($this->session->data['error_warning']);
+        } else {
+            $data['error_warning'] = false;
+        }
+        
+        /* Breadcrumbs */
+        $data['breadcrumbs'] = array();
+        
+        $data['breadcrumbs'][] = array(
+            'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true),
+            'text' => $this->language->get('text_home')
+        );
+        
+        $data['breadcrumbs'][] = array(
+            'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], true),
+            'text' => $this->language->get('text_payment')
+        );
+        
+        $data['breadcrumbs'][] = array(
+            'href' => $this->url->link('payment/moip', 'token=' . $this->session->data['token'], true),
+            'text' => $this->language->get('heading_title')
+        );
+        
+        $data['breadcrumbs'][] = array(
+            'href' => $this->url->link('payment/moip/debug', 'token=' . $this->session->data['token'], true),
+            'text' => $this->language->get('heading_title_debug')
+        );
+        
+        /* Status do Debug */
+        $data['moip_debug_status'] = $this->config->get('moip_debug_status');
+        
+        /* Token */
+        $data['token'] = $this->session->data['token'];
+        
+        /* Captura o log de erro */
+        if (file_exists(DIR_LOGS . 'moip.log')) {
+            $data['debug'] = file(DIR_LOGS . 'moip.log');
+        } else {
+            $data['debug'] = array();
+        }
+        
+        /* Links */
+        $data['configuration'] = $this->url->link('payment/moip', 'token=' . $this->session->data['token'], true);
+        $data['download'] = $this->url->link('payment/moip/debug_download', 'token=' . $this->session->data['token'], true);
+        $data['clear'] = $this->url->link('payment/moip/debug_clear', 'token=' . $this->session->data['token'], true);
+        $data['cancel'] = $this->url->link('payment/moip', 'token=' . $this->session->data['token'], true);
+        
+        /* Template */
+        $data['header'] = $this->load->controller('common/header');
+        $data['column_left'] = $this->load->controller('common/column_left');
+        $data['footer'] = $this->load->controller('common/footer');
+        
+        $this->response->setOutput($this->load->view('payment/moip_debug.tpl', $data));
+    }
+    
+	public function debug_download() {
+        $this->response->addheader('Pragma: public');
+		$this->response->addheader('Expires: 0');
+		$this->response->addheader('Content-Description: File Transfer');
+		$this->response->addheader('Content-Type: application/octet-stream');
+		$this->response->addheader('Content-Disposition: attachment; filename=' . $this->config->get('config_name') . '_' . date('Y-m-d_H-i-s', time()) . '_moip_debug.log');
+		$this->response->addheader('Content-Transfer-Encoding: binary');
+		$this->response->setOutput(file_get_contents(DIR_LOGS . 'moip.log', FILE_USE_INCLUDE_PATH, null));
+    }
+    
+	public function debug_clear() {
+        /* Verifica se o usuário tem permissão para modificar */
+        if ($this->user->hasPermission('modify', 'payment/moip')) {
+            $fp = fopen(DIR_LOGS . 'moip.log', 'w+');
+            fclose($fp);
+            
+            $this->response->redirect($this->url->link('payment/moip/debug', 'token=' . $this->session->data['token'], true));
+        } else {
+            $this->response->redirect($this->url->link('error/permission', 'token=' . $this->session->data['token'], true));
+        }
+    }
+    
 	public function validate() {
 		if (!$this->user->hasPermission('modify', 'payment/moip')) {
 			$this->error['warning'] = $this->language->get('warning');
