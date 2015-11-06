@@ -46,8 +46,8 @@
 				<!-- Nav -->
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#config"><?php echo $tab_config ?></a></li>
-					<li><a data-toggle="tab" href="#payment-status"><?php echo $tab_status_payment ?></a></li>
 					<li><a data-toggle="tab" href="#desconto"><?php echo $tab_desconto ?></a></li>
+					<li><a data-toggle="tab" href="#payment-status"><?php echo $tab_status_payment ?></a></li>
 					<li><a data-toggle="tab" href="#plots"><?php echo $tab_plots ?></a></li>
 					<li><a data-toggle="tab" href="#billet"><?php echo $tab_billet ?></a></li>
 					<li><a data-toggle="tab" href="#payment-method"><?php echo $tab_payment_method ?></a></li>
@@ -174,6 +174,65 @@
 								</div>
 							</div>
               
+						</div>
+						
+						<!-- Tab Área Geográfica e Ordem -->
+						<div class="tab-pane" id="desconto">
+							<fieldset>
+                <legend><?php echo $text_desconto ?></legend>
+                
+                <!-- Desconto Boleto -->
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><?php echo $entry_desconto_boleto ?></label>
+                  <div class="col-sm-10">
+                    <input class="form-control" name="moip_desconto_boleto" value="<?php echo $moip_desconto_boleto ?>" type="text" />
+                  </div>
+                </div>
+                
+                <!-- Desconto Débito -->
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><?php echo $entry_desconto_debito ?></label>
+                  <div class="col-sm-10">
+                    <input class="form-control" name="moip_desconto_debito" value="<?php echo $moip_desconto_debito ?>" type="text" />
+                  </div>
+                </div>
+                
+                <!-- Desconto Cartão de Crédito -->
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><?php echo $entry_desconto_cartao ?></label>
+                  <div class="col-sm-10">
+                    <input class="form-control" name="moip_desconto_cartao" value="<?php echo $moip_desconto_cartao ?>" type="text" />
+                  </div>
+                </div>
+              </fieldset>
+              
+              <fieldset>
+                <legend><?php echo $text_acrescimo ?></legend>
+                
+                <!-- Acréscimo Boleto -->
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><?php echo $entry_acrescimo_boleto ?></label>
+                  <div class="col-sm-10">
+                    <input class="form-control" name="moip_acrescimo_boleto" value="<?php echo $moip_acrescimo_boleto ?>" type="text" />
+                  </div>
+                </div>
+                
+                <!-- Acréscimo Débito -->
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><?php echo $entry_acrescimo_debito ?></label>
+                  <div class="col-sm-10">
+                    <input class="form-control" name="moip_acrescimo_debito" value="<?php echo $moip_acrescimo_debito ?>" type="text" />
+                  </div>
+                </div>
+                
+                <!-- Acréscimo Cartão de Crédito -->
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><?php echo $entry_acrescimo_cartao ?></label>
+                  <div class="col-sm-10">
+                    <input class="form-control" name="moip_acrescimo_cartao" value="<?php echo $moip_acrescimo_cartao ?>" type="text" />
+                  </div>
+                </div>
+              </fieldset>
 						</div>
 						
 						<!-- Tab Status de Pagamento -->
@@ -324,36 +383,23 @@
 							</div>							
 						</div>
 						
-						<!-- Tab Área Geográfica e Ordem -->
-						<div class="tab-pane" id="desconto">
-							
-							<!-- Desconto Boleto -->
-							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_desconto_boleto ?></label>
-								<div class="col-sm-10">
-									<input class="form-control" name="moip_desconto_boleto" value="<?php echo $moip_desconto_boleto ?>" type="text" />
-								</div>
-							</div>
-							
-							<!-- Desconto Débito -->
-							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_desconto_debito ?></label>
-								<div class="col-sm-10">
-									<input class="form-control" name="moip_desconto_debito" value="<?php echo $moip_desconto_debito ?>" type="text" />
-								</div>
-							</div>
-							
-							<!-- Desconto Cartão de Crédito -->
-							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_desconto_cartao ?></label>
-								<div class="col-sm-10">
-									<input class="form-control" name="moip_desconto_cartao" value="<?php echo $moip_desconto_cartao ?>" type="text" />
-								</div>
-							</div>
-						</div>
-						
 						<!-- Tab Parcelas -->
 						<div class="tab-pane" id="plots">
+            
+              <div class="container-fluid">
+                <?php if ($error_parcelas) { ?>
+								<div class="alert alert-danger"><?php echo $error_parcelas ?></div>
+								<?php } ?>
+                
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
 						
 							<!-- Parcelas -->
 							<div class="form-group">

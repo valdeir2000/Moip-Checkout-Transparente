@@ -141,6 +141,48 @@ class ControllerPaymentMoip extends Controller {
 		} else {
 			$data['moip_sort_order'] = $this->config->get('moip_sort_order');
 		}
+        
+        /* Desconto Boleto */
+		if (isset($this->request->post['moip_desconto_boleto'])) {
+			$data['moip_desconto_boleto'] = $this->request->post['moip_desconto_boleto'];
+		} else {
+			$data['moip_desconto_boleto'] = $this->config->get('moip_desconto_boleto');
+		}
+		
+		/* Desconto Débito */
+		if (isset($this->request->post['moip_desconto_debito'])) {
+			$data['moip_desconto_debito'] = $this->request->post['moip_desconto_debito'];
+		} else {
+			$data['moip_desconto_debito'] = $this->config->get('moip_desconto_debito');
+		}
+		
+		/* Desconto Cartão de Crédito */
+		if (isset($this->request->post['moip_desconto_cartao'])) {
+			$data['moip_desconto_cartao'] = $this->request->post['moip_desconto_cartao'];
+		} else {
+			$data['moip_desconto_cartao'] = $this->config->get('moip_desconto_cartao');
+		}
+		
+		/* Acréscimo Boleto */
+		if (isset($this->request->post['moip_acrescimo_boleto'])) {
+			$data['moip_acrescimo_boleto'] = $this->request->post['moip_acrescimo_boleto'];
+		} else {
+			$data['moip_acrescimo_boleto'] = $this->config->get('moip_acrescimo_boleto');
+		}
+		
+		/* Acréscimo Débito */
+		if (isset($this->request->post['moip_acrescimo_debito'])) {
+			$data['moip_acrescimo_debito'] = $this->request->post['moip_acrescimo_debito'];
+		} else {
+			$data['moip_acrescimo_debito'] = $this->config->get('moip_acrescimo_debito');
+		}
+		
+		/* Acréscimo Cartão de Crédito */
+		if (isset($this->request->post['moip_acrescimo_cartao'])) {
+			$data['moip_acrescimo_cartao'] = $this->request->post['moip_acrescimo_cartao'];
+		} else {
+			$data['moip_acrescimo_cartao'] = $this->config->get('moip_acrescimo_cartao');
+		}
 		
 		/* Autorizado */
 		if (isset($this->request->post['moip_autorizado'])) {
@@ -203,27 +245,6 @@ class ControllerPaymentMoip extends Controller {
 			$data['moip_reembolsado'] = $this->request->post['moip_reembolsado'];
 		} else {
 			$data['moip_reembolsado'] = $this->config->get('moip_reembolsado');
-		}
-		
-		/* Desconto Boleto */
-		if (isset($this->request->post['moip_desconto_boleto'])) {
-			$data['moip_desconto_boleto'] = $this->request->post['moip_desconto_boleto'];
-		} else {
-			$data['moip_desconto_boleto'] = $this->config->get('moip_desconto_boleto');
-		}
-		
-		/* Desconto Débito */
-		if (isset($this->request->post['moip_desconto_debito'])) {
-			$data['moip_desconto_debito'] = $this->request->post['moip_desconto_debito'];
-		} else {
-			$data['moip_desconto_debito'] = $this->config->get('moip_desconto_debito');
-		}
-		
-		/* Desconto Cartão de Crédito */
-		if (isset($this->request->post['moip_desconto_cartao'])) {
-			$data['moip_desconto_cartao'] = $this->request->post['moip_desconto_cartao'];
-		} else {
-			$data['moip_desconto_cartao'] = $this->config->get('moip_desconto_cartao');
 		}
 		
 		/* Parcelas */

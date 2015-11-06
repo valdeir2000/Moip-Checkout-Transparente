@@ -24,7 +24,7 @@ class Request {
         if ($moip->getModeTest()) {
             $this->url = self::ENDPOINT_SANDBOX;
         } else {
-            $this->url = ENDPOINT_PRODUCTION;
+            $this->url = self::ENDPOINT_PRODUCTION;
         }
         
         $this->addHeader('Content-Type: application/json');
