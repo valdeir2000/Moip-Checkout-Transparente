@@ -394,69 +394,73 @@
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td></td>
-                      <td></td>
+                      <td><?php echo $column_de ?></td>
+                      <td><?php echo $column_para ?></td>
+                      <td><?php echo $column_desconto ?></td>
+                      <td><?php echo $column_acrescimo ?></td>
                     </tr>
                   </thead>
+                  
+                  <tbody>
+                    <?php $plot_row = 0 ?>
+                    <?php foreach($moip_parcela as $parcela) { ?>
+                    <tr id="plot<?php echo $plot_row ?>">
+                      <td class="col-sm-3">
+                        <select name="moip_parcela[<?php echo $plot_row ?>][de]" class="form-control">
+                          <?php for($i = 1; $i <= 12; $i++) { ?>
+                            <?php if ($i == $parcela['de']) { ?>
+                            <option value="<?php echo $i ?>" selected><?php echo $i ?>x</option>
+                            <?php } else { ?>
+                            <option value="<?php echo $i ?>"><?php echo $i ?>x</option>
+                            <?php } ?>
+                          <?php } ?>
+                        </select>
+                      </td>
+                      <td class="col-sm-3">
+                        <select name="moip_parcela[<?php echo $plot_row ?>][para]" class="form-control">
+                          <?php for($i = 1; $i <= 12; $i++) { ?>
+                            <?php if ($i == $parcela['para']) { ?>
+                            <option value="<?php echo $i ?>" selected><?php echo $i ?>x</option>
+                            <?php } else { ?>
+                            <option value="<?php echo $i ?>"><?php echo $i ?>x</option>
+                            <?php } ?>
+                          <?php } ?>
+                        </select>
+                      </td>
+                      <td class="col-sm-3">
+                        <div class="input-group">
+                          <input type="number" name="moip_parcela[<?php echo $plot_row ?>][desconto]" value="<?php echo $parcela['desconto'] ?>" class="form-control" />
+                          <input type="hidden" name="moip_parcela[<?php echo $plot_row ?>][desconto_tipo]" value="<?php echo $parcela['desconto_tipo'] ?>" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-fixo <?php echo ($parcela['desconto_tipo'] == 'F') ? 'active' : '' ?>" data-toggle="tooltip" title="<?php echo $text_fixo ?>">$</button>
+                            <button type="button" class="btn btn-primary btn-porcento <?php echo ($parcela['desconto_tipo'] == 'P') ? 'active' : '' ?>" data-toggle="tooltip" title="<?php echo $text_fixo ?>">%</button>
+                          </span>
+                        </div>
+                      </td>
+                      <td class="col-sm-3">
+                        <div class="input-group">
+                          <input type="number" name="moip_parcela[<?php echo $plot_row ?>][acrescimo]" class="form-control" value="<?php echo $parcela['acrescimo'] ?>" />
+                          <input type="hidden" name="moip_parcela[<?php echo $plot_row ?>][acrescimo_tipo]" value="<?php echo $parcela['acrescimo_tipo'] ?>" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-fixo <?php echo ($parcela['acrescimo_tipo'] == 'F') ? 'active' : '' ?>" data-toggle="tooltip" title="<?php echo $text_fixo ?>">$</button>
+                            <button type="button" class="btn btn-primary btn-porcento <?php echo ($parcela['acrescimo_tipo'] == 'P') ? 'active' : '' ?>" data-toggle="tooltip" title="<?php echo $text_fixo ?>">%</button>
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                    <?php $plot_row++; ?>
+                    <?php } ?>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td colspan="4" class="text-right">
+                        <button type="button" id="desfazer-parcela" class="btn btn-danger" data-toggle="tooltip" title="<?php echo $button_desfazer ?>"><i class="fa fa-reply"></i></button>
+                        <button type="button" id="add-parcela" class="btn btn-primary" data-toggle="tooltip" title="<?php echo $button_add_parcela ?>"><i class="fa fa-plus"></i></button>
+                      </td>
+                    </tr>
+                  </tfoot>
                 </table>
-              </div>
-						
-							<!-- Parcelas -->
-							<div class="form-group">
-								
-								<?php if ($error_parcelas) { ?>
-								<div class="alert alert-danger"><?php echo $error_parcelas ?></div>
-								<?php } ?>
-								
-								<table class="table table-bordered table-hover table-striped" id="table-plot">
-									<thead>
-										<tr>
-											<th><?php echo $entry_parcela_de ?></th>
-											<th><?php echo $entry_parcela_para ?></th>
-											<th><?php echo $entry_parcela_juros ?></th>
-											<th></th>
-										</tr>
-									</thead>
-									
-									<tbody>
-										<?php $count_plot = 0; ?>
-										<?php foreach($moip_parcela as $parcela) { ?>
-										<tr id="plot<?php echo $count_plot ?>">
-											<td>
-												<select name="moip_parcela[<?php echo $count_plot ?>][de]" class="number-plots form-control">
-													<?php for($i=2;$i<=12;$i++) { ?>
-													<?php if ($parcela['de'] == $i) { ?>
-													<option value="<?php echo $i ?>" selected><?php echo $i ?></option>
-													<?php } else { ?>
-													<option value="<?php echo $i ?>"><?php echo $i ?></option>
-													<?php } ?>
-													<?php } ?>
-												</select>
-											</td>
-											<td>
-												<select name="moip_parcela[<?php echo $count_plot ?>][para]" class="number-plots form-control">
-													<?php for($i=2;$i<=12;$i++) { ?>
-													<?php if ($parcela['para'] == $i) { ?>
-													<option value="<?php echo $i ?>" selected><?php echo $i ?></option>
-													<?php } else { ?>
-													<option value="<?php echo $i ?>"><?php echo $i ?></option>
-													<?php } ?>
-													<?php } ?>
-												</select>
-											</td>
-											<td><input type="text" name="moip_parcela[<?php echo $count_plot ?>][juros]" value="<?php echo $parcela['juros'] ?>" class="form-control" /></td>
-											<td class="text-right"><button type="button" onClick="$('#plot<?php echo $count_plot ?>').remove()" class="btn btn-danger"><i class="fa fa-remove"></i></button></td>
-										</tr>
-										<?php $count_plot++ ?>
-										<?php } ?>
-									</tbody>
-									
-									<tfoot>
-										<tr>
-											<td colspan="4" class="text-right"><button type="button" id="add-plot" class="btn btn-primary"><i class="fa fa-plus"></i></button></td>
-										</tr>
-									</tfoot>
-								</table>
 							</div>
 						</div>
 						
@@ -497,9 +501,12 @@
 							
 							<!-- Logo -->
 							<div class="form-group">
-								<label class="col-sm-2 control-label"><?php echo $entry_boleto_logo ?></label>
+								<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_em_breve ?>"><?php echo $entry_boleto_logo ?></span></label>
 								<div class="col-sm-10">
-									<input type="text" name="moip_boleto_logo" value="<?php echo $moip_boleto_logo ?>" class="form-control" />
+                  <input type="hidden" name="moip_boleto_logo" id="moip_boleto_logo" value="<?php echo $moip_boleto_logo ?>" />
+                  <a data-toggle="image" id="boleto_logo">
+                    <img src="<?php echo $moip_boleto_logo ?>" />
+                  </a>
 								</div>
 							</div>
 						</div>
@@ -576,34 +583,77 @@
 
 <script type="text/javascript"><!--
 	$(function(){
-	
-		$('#add-plot').click(function(){
-			
-			var html = '';
-			var count_plot = <?php echo (int)$count_plot; ?>;
-			
-			html += '<tr id="plot' + count_plot + '">';
-			html += '	<td>';
-			html += '		<select name="moip_parcela[' + count_plot + '][de]" class="number-plots form-control">';
-								for(i=2;i<=12;i++) {
-			html += '			<option value="' + i + '">' + i + '</option>';
-								}
-			html += '		</select>';
-			html += '	</td>';
-			html += '	<td>';
-			html += '		<select name="moip_parcela[' + count_plot + '][para]" class="number-plots form-control">';
-								for(i=2;i<=12;i++) {
-			html += '			<option value="' + i + '">' + i + '</option>';
-								}
-			html += '		</select>';
-			html += '	</td>';
-			html += '	<td><input type="text" name="moip_parcela[' + count_plot + '][juros]" value="" class="form-control" /></td>';
-			html += '	<td class="text-right"><button type="button" onClick="$(\'#plot' + count_plot + '\').remove()" class="btn btn-danger"><i class="fa fa-remove"></i></button></td>';
-			html += '</tr>';
-			
-			$('#table-plot tbody').append(html);
-		});
+    $('#plots .btn-fixo').click(function(){
+      $(this).parent().find('button').removeClass('active');
+      $(this).parents('div.input-group').find('input[type="hidden"]').val('F');
+      $(this).addClass('active');
+    });
+    
+    $('#plots .btn-porcento').click(function(){
+      $(this).parent().find('button').removeClass('active');
+      $(this).parents('div.input-group').find('input[type="hidden"]').val('P');
+      $(this).addClass('active');
+    });
+    
+    var plot_row = '<?php echo $plot_row ?>';
+    
+    $('#add-parcela').click(function(){
+      var html = '';
+      var start_from = parseInt($('#plots table tbody tr:last select:eq(1)').val()) + 1;
+      
+      $('#plots table .alert-danger').remove();
+      
+      if (start_from > 12 || start_from == 'NaN') {
+        $('#plots table').before('<div class="alert alert-danger"><?php echo $error_parcelas_limite ?> <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+        return false;
+      }
+    
+      html += '<tr id="plot' + plot_row + '">';
+      html += '  <td class="col-sm-3">';
+      html += '    <select name="moip_parcela[' + plot_row + '][de]" class="form-control">';
+                     for(i = start_from; i <= 12; i++) {
+      html += '      <option value="' + i + '">' + i + 'x</option>';
+                     }
+      html += '    </select>';
+      html += '  </td>';
+      html += '  <td class="col-sm-3">';
+      html += '    <select name="moip_parcela[' + plot_row + '][para]" class="form-control">';
+                     for(i = start_from; i <= 12; i++) {
+      html += '      <option value="' + i + '">' + i + 'x</option>';
+                     }
+      html += '    </select>';
+      html += '  </td>';
+      html += '  <td class="col-sm-3">';
+      html += '    <div class="input-group">';
+      html += '      <input type="number" name="moip_parcela[' + plot_row + '][desconto]" class="form-control" />';
+      html += '      <input type="hidden" name="moip_parcela[' + plot_row + '][desconto_tipo]" value="F" />';
+      html += '      <span class="input-group-btn">';
+      html += '        <button type="button" class="btn btn-primary active btn-fixo" data-toggle="tooltip" title="Fixo">$</button>';
+      html += '        <button type="button" class="btn btn-primary btn-porcento" data-toggle="tooltip" title="Porcento">%</button>';
+      html += '      </span>';
+      html += '    </div>';
+      html += '  </td>';
+      html += '  <td class="col-sm-3">';
+      html += '    <div class="input-group">';
+      html += '      <input type="number" name="moip_parcela[' + plot_row + '][acrescimo]" class="form-control" />';
+      html += '      <input type="hidden" name="moip_parcela[' + plot_row + '][acrescimo_tipo]" value="F" />';
+      html += '      <span class="input-group-btn">';
+      html += '        <button type="button" class="btn btn-primary active btn-fixo" data-toggle="tooltip" title="Fixo">$</button>';
+      html += '        <button type="button" class="btn btn-primary btn-porcento" data-toggle="tooltip" title="Porcento">%</button>';
+      html += '      </span>';
+      html += '    </div>';
+      html += '  </td>';
+      html += '</tr>';
+      
+      $('#plots table tbody').append(html);
+      
+      plot_row++;
+    });
 	});
+  
+  $('#desfazer-parcela').click(function(){
+    $('#plots table tbody tr:last').remove();
+  });
 //--></script>
 
 <?php echo $footer ?>

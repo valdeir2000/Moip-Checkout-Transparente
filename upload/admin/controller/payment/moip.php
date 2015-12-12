@@ -24,6 +24,7 @@ class ControllerPaymentMoip extends Controller {
 		/* Load Models */
 		$this->load->model('localisation/order_status');
 		$this->load->model('localisation/geo_zone');
+		$this->load->model('tool/image');
 		
 		/* Error Permission */
 		if (isset($this->error['warning'])) {
@@ -287,9 +288,11 @@ class ControllerPaymentMoip extends Controller {
 		/* Boleto: Logo */
 		if (isset($this->request->post['moip_boleto_logo'])) {
 			$data['moip_boleto_logo'] = $this->request->post['moip_boleto_logo'];
+		} elseif ($this->config->get('moip_boleto_logo') && ($this->config->get('moip_boleto_logo') != '')) {
+			$data['moip_boleto_logo'] = $this->model_tool_image->resize($this->config->get('moip_boleto_logo'), 100, 100);
 		} else {
-			$data['moip_boleto_logo'] = $this->config->get('moip_boleto_logo');
-		}
+            $data['moip_boleto_logo'] = $this->language->get('text_logo');
+        }
 		
 		/* Cartão de Crédito */
 		if (isset($this->request->post['moip_cartao'])) {
