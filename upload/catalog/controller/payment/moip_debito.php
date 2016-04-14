@@ -75,11 +75,7 @@ class ControllerPaymentMoipDebito extends Controller {
 		//Links
 		$data['continue'] = $this->url->link('checkout/success', '', 'SSL');
 		
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/moip_debito.tpl')) {
-			return $this->load->view($this->config->get('config_template') . '/template/payment/moip_debito.tpl', $data);
-		} else {
-			return $this->load->view('default/template/payment/moip_debito.tpl', $data);
-		}
+		return $this->load->view('payment/moip_debito.tpl', $data);
 	}
 	
 	private function removeAcentos($text) {

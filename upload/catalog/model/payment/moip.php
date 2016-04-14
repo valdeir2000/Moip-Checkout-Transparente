@@ -79,11 +79,21 @@ class ModelPaymentMoip extends Model {
 		$xml = simplexml_load_string($response);
 		
 		if ($this->config->get('moip_debug')) {
+            
+            if (file_exists(DIR_LOGS . 'moip.log')) {
+                unlink(DIR_LOGS . 'moip.log');
+            }
+            
 			$logs = new Log('moip.log');
 			$logs->write(html_entity_decode($postfields));
 			$logs->write(html_entity_decode($response));
-			$logs->write(html_entity_decode($curl_info));
-			$logs->write(html_entity_decode($curl_error));
+			
+            if (is_array($curl_info))
+                $logs->write(html_entity_decode(json_encode($curl_info)));
+            else
+                $logs->write(html_entity_decode($curl_info));
+			
+            $logs->write(html_entity_decode($curl_error));
 		}
 		
 		// Acessa XML e pega "Token de Pagamento"

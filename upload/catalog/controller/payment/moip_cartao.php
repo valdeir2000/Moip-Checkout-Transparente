@@ -75,11 +75,7 @@ class ControllerPaymentMoipCartao extends Controller {
 		//Links
 		$data['continue'] = $this->url->link('checkout/success', '', 'SSL');
 		
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/moip_cartao.tpl')) {
-			return $this->load->view($this->config->get('config_template') . '/template/payment/moip_cartao.tpl', $data);
-		} else {
-			return $this->load->view('default/template/payment/moip_cartao.tpl', $data);
-		}
+		return $this->load->view('payment/moip_cartao.tpl', $data);
 	}
 	
 	private function removeAcentos($text) {

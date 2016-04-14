@@ -1,7 +1,10 @@
 <?php
 class ModelTotalMoipDesconto extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+	public function getTotal($total) {
 		if (isset($this->session->data['payment_method']['code'])) {
+            
+            $valor_desconto = 0;
+            
 			if ($this->session->data['payment_method']['code'] == 'moip_boleto') {
 				
 				$this->load->language('payment/moip');
@@ -12,16 +15,6 @@ class ModelTotalMoipDesconto extends Model {
 				} else {
 					$valor_desconto = preg_replace('/[^0-9.]/', '', $this->config->get('moip_desconto_boleto'));
 				}
-
-				
-				$total_data[] = array(
-					'code'       => 'moip_desconto',
-					'title'      => $this->language->get('text_desconto'),
-					'value'      => $valor_desconto,
-					'sort_order' => $this->config->get('moip_sort_order')
-				);
-
-				$total -= $valor_desconto;
 				
 			} elseif ($this->session->data['payment_method']['code'] == 'moip_cartao') {
 				
@@ -33,16 +26,6 @@ class ModelTotalMoipDesconto extends Model {
 				} else {
 					$valor_desconto = preg_replace('/[^0-9.]/', '', $this->config->get('moip_desconto_cartao'));
 				}
-
-				
-				$total_data[] = array(
-					'code'       => 'moip_desconto',
-					'title'      => $this->language->get('text_desconto'),
-					'value'      => $valor_desconto,
-					'sort_order' => $this->config->get('moip_sort_order')
-				);
-
-				$total -= $valor_desconto;
 				
 			} elseif ($this->session->data['payment_method']['code'] == 'moip_debito') {
 				
@@ -54,17 +37,18 @@ class ModelTotalMoipDesconto extends Model {
 				} else {
 					$valor_desconto = preg_replace('/[^0-9.]/', '', $this->config->get('moip_desconto_debito'));
 				}
-
-				
-				$total_data[] = array(
+			}
+            
+            if ($valor_desconto > 0) {
+                $total['total'] -= $valor_desconto;
+                
+                $total['totals'][] = array(
 					'code'       => 'moip_desconto',
 					'title'      => $this->language->get('text_desconto'),
-					'value'      => $valor_desconto,
-					'sort_order' => $this->config->get('moip_sort_order')
+					'value'      => -$valor_desconto,
+					'sort_order' => ($this->config->get('sub_total_sort_order') + 1)
 				);
-
-				$total -= $valor_desconto;
-			}
+            }
 		}
 	}
 }

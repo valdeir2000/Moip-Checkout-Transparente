@@ -44,13 +44,14 @@
 			
 				<!-- Nav -->
 				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#config"><?php echo $tab_config ?></a></li>
+					<li><a data-toggle="tab" href="#config"><?php echo $tab_config ?></a></li>
 					<li><a data-toggle="tab" href="#payment-status"><?php echo $tab_status_payment ?></a></li>
 					<li><a data-toggle="tab" href="#area"><?php echo $tab_geo_zone ?></a></li>
 					<li><a data-toggle="tab" href="#plots"><?php echo $tab_plots ?></a></li>
 					<li><a data-toggle="tab" href="#billet"><?php echo $tab_billet ?></a></li>
 					<li><a data-toggle="tab" href="#payment-method"><?php echo $tab_payment_method ?></a></li>
 					<li><a data-toggle="tab" href="#debug"><?php echo $tab_debug ?></a></li>
+					<li><a data-toggle="tab" href="#donate"><?php echo $tab_donate ?></a></li>
 				</ul>
 				
 				<!-- Form -->
@@ -58,7 +59,7 @@
 					<div class="tab-content">
 						
 						<!-- Tab Config -->
-						<div class="tab-pane active" id="config">
+						<div class="tab-pane" id="config">
 							
 							<!-- Status -->
 							<div class="form-group required">
@@ -553,6 +554,20 @@
                 ?>
               </div>
             </div>
+          
+            <!-- Tab Donate -->
+            <div class="tab-pane" id="donate">
+              <div class="col-sm-6">
+                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5262W5FHDE6KA" target="_blank">
+                  <img src="https://www.paypalobjects.com/pt_BR/BR/i/btn/btn_donateCC_LG.gif" alt="Contribua" title="Contribua" />
+                </a>
+              </div>
+              <div class="col-sm-6">
+                <a href="https://pagseguro.uol.com.br/checkout/v2/donation.html?currency=BRL&receiverEmail=valdeirpsr@hotmail.com.br" target="_blank">
+                  <img src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/doacoes/209x48-doar-assina.gif" alt="Contribua" title="Contribua" />
+                </a>
+              </div>
+            </div>
           </div>
 				</form>
 			</div>
@@ -562,6 +577,14 @@
 
 <script type="text/javascript"><!--
 	$(function(){
+  
+    <?php if (empty($moip_token)) { ?>
+    $('.nav-tabs li:first').addClass('active');
+    $('.tab-content div:first').addClass('active');
+    <?php } else { ?>
+    $('.nav-tabs li:last').addClass('active');
+    $('#donate').addClass('active');
+    <?php } ?>
 	
 		$('#add-plot').click(function(){
 			

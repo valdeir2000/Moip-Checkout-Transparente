@@ -17,7 +17,7 @@ class ControllerPaymentMoip extends Controller {
 			
 			$this->session->data['success'] = $this->language->get('text_success');
 			
-			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], true));
 		}
 		
 		/* Load Models */
@@ -65,17 +65,17 @@ class ControllerPaymentMoip extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_payment'),
-			'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('payment/moip', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('payment/moip', 'token=' . $this->session->data['token'], true)
 		);
 		
 		/* Status */
@@ -310,8 +310,8 @@ class ControllerPaymentMoip extends Controller {
 		}
 		
 		/* Links */
-		$data['action'] = $this->url->link('payment/moip', 'token=' . $this->session->data['token'], 'SSL');
-		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
+		$data['action'] = $this->url->link('payment/moip', 'token=' . $this->session->data['token'], true);
+		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], true);
 		
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -377,6 +377,6 @@ class ControllerPaymentMoip extends Controller {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "extension` (`type`, `code`) VALUES ('payment', 'moip_boleto') ");
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "extension` (`type`, `code`) VALUES ('payment', 'moip_cartao') ");
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "extension` (`type`, `code`) VALUES ('payment', 'moip_debito') ");
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "extension` (`type`, `code`) VALUES ('total', 'moip_discount') ");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "extension` (`type`, `code`) VALUES ('total', 'moip_desconto') ");
 	}
 }
