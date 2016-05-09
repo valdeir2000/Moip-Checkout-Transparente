@@ -307,8 +307,6 @@ class Order {
         
         $request = new Request('Orders', json_encode($data), $this->moip);
         
-        echo json_encode($data);
-        
         return $request->execute();
     }
 }

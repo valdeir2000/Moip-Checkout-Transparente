@@ -25,40 +25,68 @@ class ControllerPaymentMoip extends Controller {
 		$this->load->model('localisation/order_status');
 		$this->load->model('localisation/geo_zone');
 		$this->load->model('tool/image');
+		$this->load->model('customer/custom_field');
 		
 		/* Error Permission */
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$data['error_warning'] = '';
+			$data['error_warning'] = false;
+		}
+        
+		if (isset($this->error['permission'])) {
+			$data['error_permission'] = $this->error['permission'];
+		} else {
+			$data['error_permission'] = false;
 		}
 		
 		/* Error Razão do Pagamento */
 		if (isset($this->error['razao_pagamento'])) {
 			$data['error_razao_pagamento'] = $this->error['razao_pagamento'];
 		} else {
-			$data['error_razao_pagamento'] = '';
+			$data['error_razao_pagamento'] = false;
 		}
 		
 		/* Error Token */
 		if (isset($this->error['token'])) {
 			$data['error_token'] = $this->error['token'];
 		} else {
-			$data['error_token'] = '';
+			$data['error_token'] = false;
 		}
 		
 		/* Error Key */
 		if (isset($this->error['key'])) {
 			$data['error_key'] = $this->error['key'];
 		} else {
-			$data['error_key'] = '';
+			$data['error_key'] = false;
 		}
 		
 		/* Error Parcelas */
 		if (isset($this->error['parcelas'])) {
 			$data['error_parcelas'] = $this->error['parcelas'];
 		} else {
-			$data['error_parcelas'] = '';
+			$data['error_parcelas'] = false;
+		}
+		
+		/* Error Campo Personaliazdo [CPF] */
+		if (isset($this->error['cpf'])) {
+			$data['error_cpf'] = $this->error['cpf'];
+		} else {
+			$data['error_cpf'] = false;
+		}
+		
+		/* Error Campo Personaliazdo [Data de Nascimento] */
+		if (isset($this->error['data_nascimento'])) {
+			$data['error_data_nascimento'] = $this->error['data_nascimento'];
+		} else {
+			$data['error_data_nascimento'] = false;
+		}
+		
+		/* Error Campo Personaliazdo [Endereço - Número] */
+		if (isset($this->error['endereco_numero'])) {
+			$data['error_endereco_numero'] = $this->error['endereco_numero'];
+		} else {
+			$data['error_endereco_numero'] = false;
 		}
 		
 		
@@ -109,10 +137,10 @@ class ControllerPaymentMoip extends Controller {
 		}
 		
 		/* Modo de Teste */
-		if (isset($this->request->post['moip_modo_teste'])) {
-			$data['moip_modo_teste'] = $this->request->post['moip_modo_teste'];
+		if (isset($this->request->post['moip_sandbox'])) {
+			$data['moip_sandbox'] = $this->request->post['moip_sandbox'];
 		} else {
-			$data['moip_modo_teste'] = $this->config->get('moip_modo_teste');
+			$data['moip_sandbox'] = $this->config->get('moip_sandbox');
 		}
 		
 		/* Debug */
@@ -149,12 +177,26 @@ class ControllerPaymentMoip extends Controller {
 		} else {
 			$data['moip_desconto_boleto'] = $this->config->get('moip_desconto_boleto');
 		}
+        
+        /* Desconto Boleto [Tipo] */
+		if (isset($this->request->post['moip_desconto_boleto_tipo'])) {
+			$data['moip_desconto_boleto_tipo'] = $this->request->post['moip_desconto_boleto_tipo'];
+		} else {
+			$data['moip_desconto_boleto_tipo'] = $this->config->get('moip_desconto_boleto_tipo');
+		}
 		
 		/* Desconto Débito */
 		if (isset($this->request->post['moip_desconto_debito'])) {
 			$data['moip_desconto_debito'] = $this->request->post['moip_desconto_debito'];
 		} else {
 			$data['moip_desconto_debito'] = $this->config->get('moip_desconto_debito');
+		}
+		
+		/* Desconto Débito [Tipo] */
+		if (isset($this->request->post['moip_desconto_debito_tipo'])) {
+			$data['moip_desconto_debito_tipo'] = $this->request->post['moip_desconto_debito_tipo'];
+		} else {
+			$data['moip_desconto_debito_tipo'] = $this->config->get('moip_desconto_debito_tipo');
 		}
 		
 		/* Desconto Cartão de Crédito */
@@ -164,11 +206,25 @@ class ControllerPaymentMoip extends Controller {
 			$data['moip_desconto_cartao'] = $this->config->get('moip_desconto_cartao');
 		}
 		
+		/* Desconto Cartão de Crédito [Tipo] */
+		if (isset($this->request->post['moip_desconto_cartao_tipo'])) {
+			$data['moip_desconto_cartao_tipo'] = $this->request->post['moip_desconto_cartao_tipo'];
+		} else {
+			$data['moip_desconto_cartao_tipo'] = $this->config->get('moip_desconto_cartao_tipo');
+		}
+		
 		/* Acréscimo Boleto */
 		if (isset($this->request->post['moip_acrescimo_boleto'])) {
 			$data['moip_acrescimo_boleto'] = $this->request->post['moip_acrescimo_boleto'];
 		} else {
 			$data['moip_acrescimo_boleto'] = $this->config->get('moip_acrescimo_boleto');
+		}
+		
+		/* Acréscimo Boleto [Tipo] */
+		if (isset($this->request->post['moip_acrescimo_boleto_tipo'])) {
+			$data['moip_acrescimo_boleto_tipo'] = $this->request->post['moip_acrescimo_boleto_tipo'];
+		} else {
+			$data['moip_acrescimo_boleto_tipo'] = $this->config->get('moip_acrescimo_boleto_tipo');
 		}
 		
 		/* Acréscimo Débito */
@@ -178,11 +234,25 @@ class ControllerPaymentMoip extends Controller {
 			$data['moip_acrescimo_debito'] = $this->config->get('moip_acrescimo_debito');
 		}
 		
+		/* Acréscimo Débito [Tipo] */
+		if (isset($this->request->post['moip_acrescimo_debito_tipo'])) {
+			$data['moip_acrescimo_debito_tipo'] = $this->request->post['moip_acrescimo_debito_tipo'];
+		} else {
+			$data['moip_acrescimo_debito_tipo'] = $this->config->get('moip_acrescimo_debito_tipo');
+		}
+		
 		/* Acréscimo Cartão de Crédito */
 		if (isset($this->request->post['moip_acrescimo_cartao'])) {
 			$data['moip_acrescimo_cartao'] = $this->request->post['moip_acrescimo_cartao'];
 		} else {
 			$data['moip_acrescimo_cartao'] = $this->config->get('moip_acrescimo_cartao');
+		}
+		
+		/* Acréscimo Cartão de Crédito [Tipo] */
+		if (isset($this->request->post['moip_acrescimo_cartao_tipo'])) {
+			$data['moip_acrescimo_cartao_tipo'] = $this->request->post['moip_acrescimo_cartao_tipo'];
+		} else {
+			$data['moip_acrescimo_cartao_tipo'] = $this->config->get('moip_acrescimo_cartao_tipo');
 		}
 		
 		/* Autorizado */
@@ -248,6 +318,27 @@ class ControllerPaymentMoip extends Controller {
 			$data['moip_reembolsado'] = $this->config->get('moip_reembolsado');
 		}
 		
+		/* CPF */
+		if (isset($this->request->post['moip_cpf'])) {
+			$data['moip_cpf'] = $this->request->post['moip_cpf'];
+		} else {
+			$data['moip_cpf'] = $this->config->get('moip_cpf');
+		}
+		
+		/* Data de Nascimento */
+		if (isset($this->request->post['moip_data_nascimento'])) {
+			$data['moip_data_nascimento'] = $this->request->post['moip_data_nascimento'];
+		} else {
+			$data['moip_data_nascimento'] = $this->config->get('moip_data_nascimento');
+		}
+		
+		/* Número (Endereço) */
+		if (isset($this->request->post['moip_endereco_numero'])) {
+			$data['moip_endereco_numero'] = $this->request->post['moip_endereco_numero'];
+		} else {
+			$data['moip_endereco_numero'] = $this->config->get('moip_endereco_numero');
+		}
+		
 		/* Parcelas */
 		if (isset($this->request->post['moip_parcela'])) {
 			$data['moip_parcela'] = $this->request->post['moip_parcela'];
@@ -288,11 +379,9 @@ class ControllerPaymentMoip extends Controller {
 		/* Boleto: Logo */
 		if (isset($this->request->post['moip_boleto_logo'])) {
 			$data['moip_boleto_logo'] = $this->request->post['moip_boleto_logo'];
-		} elseif ($this->config->get('moip_boleto_logo') && ($this->config->get('moip_boleto_logo') != '')) {
-			$data['moip_boleto_logo'] = $this->model_tool_image->resize($this->config->get('moip_boleto_logo'), 100, 100);
 		} else {
-            $data['moip_boleto_logo'] = $this->language->get('text_logo');
-        }
+			$data['moip_boleto_logo'] = $this->model_tool_image->resize($this->config->get('moip_boleto_logo'), 100, 100);
+		}
 		
 		/* Cartão de Crédito */
 		if (isset($this->request->post['moip_cartao'])) {
@@ -320,11 +409,18 @@ class ControllerPaymentMoip extends Controller {
 		
 		/* Zonas Geográficas */
 		$data['zones'] = $this->model_localisation_geo_zone->getGeoZones();
+        
+        /* Campos Personaliazdos */
+        $data['custom_fields'] = $this->model_customer_custom_field->getCustomFields();
+        
+        /* Token da URL */
+        $data['token'] = $this->session->data['token'];
 		
 		/* Links */
 		$data['action'] = $this->url->link('payment/moip', 'token=' . $this->session->data['token'], 'SSL');
 		$data['debug'] = $this->url->link('payment/moip/debug', 'token=' . $this->session->data['token'], 'SSL');
 		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
+		$data['link_custom_field'] = $this->url->link('customer/custom_field', 'token=' . $this->session->data['token'], 'SSL');
 		
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -444,9 +540,9 @@ class ControllerPaymentMoip extends Controller {
         }
     }
     
-	public function validate() {
+	private function validate() {
 		if (!$this->user->hasPermission('modify', 'payment/moip')) {
-			$this->error['warning'] = $this->language->get('warning');
+			$this->error['permission'] = $this->language->get('error_permission');
 		}
 
 		if (empty($this->request->post['moip_razao_pagamento'])) {
@@ -454,7 +550,7 @@ class ControllerPaymentMoip extends Controller {
 		}
 
 		if (empty($this->request->post['moip_token'])) {
-			$this->error['moip_token'] = $this->language->get('error_token');
+			$this->error['token'] = $this->language->get('error_token');
 		}
 
 		if (empty($this->request->post['moip_key'])) {
@@ -493,6 +589,22 @@ class ControllerPaymentMoip extends Controller {
 			$this->request->post['moip_debito_status'] = 0;
 			$this->request->post['moip_desconto_status'] = 0;
 		}
+        
+        if (empty($this->request->post['moip_cpf'])) {
+            $this->error['cpf'] = $this->language->get('error_cpf');
+        }
+        
+        if (empty($this->request->post['moip_data_nascimento'])) {
+            $this->error['data_nascimento'] = $this->language->get('error_data_nascimento');
+        }
+        
+        if (empty($this->request->post['moip_endereco_numero'])) {
+            $this->error['endereco_numero'] = $this->language->get('error_endereco_numero');
+        }
+        
+        if ((bool)$this->error) {
+            $this->error['warning'] = $this->language->get('error_warning');
+        }
 
 		return !$this->error;
 	}
@@ -503,4 +615,11 @@ class ControllerPaymentMoip extends Controller {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "extension` (`type`, `code`) VALUES ('payment', 'moip_debito') ");
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "extension` (`type`, `code`) VALUES ('total', 'moip_discount') ");
 	}
+
+    public function custom_field_refresh() {
+        $this->load->model('customer/custom_field');
+        
+        $this->response->addheader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($this->model_customer_custom_field->getCustomFields()));
+    }
 }

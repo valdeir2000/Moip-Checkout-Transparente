@@ -70,7 +70,7 @@ class Customer {
     public function setTaxDocument($value) {
         $this->taxDocument = array(
             'type' => 'CPF',
-            'number' => $value
+            'number' => preg_replace('/[^\d]/', '', $value)
         );
         
         return $this;

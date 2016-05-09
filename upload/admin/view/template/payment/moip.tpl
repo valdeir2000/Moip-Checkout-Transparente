@@ -31,6 +31,13 @@
 		  <button type="button" class="close" data-dismiss="alert">&times;</button>
 		</div>
 		<?php } ?>
+    
+		<?php if ($error_permission) { ?>
+		<div class="alert alert-danger">
+		  <i class="fa fa-exclamation-circle"></i> <?php echo $error_permission ?>
+		  <button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		<?php } ?>
 		
 		<!-- Panel -->
 		<div class="panel panel-default">
@@ -46,8 +53,9 @@
 				<!-- Nav -->
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#config"><?php echo $tab_config ?></a></li>
-					<li><a data-toggle="tab" href="#desconto"><?php echo $tab_desconto ?></a></li>
+					<li><a data-toggle="tab" href="#discount"><?php echo $tab_discount ?></a></li>
 					<li><a data-toggle="tab" href="#payment-status"><?php echo $tab_status_payment ?></a></li>
+					<li><a data-toggle="tab" href="#custom-field"><?php echo $tab_custom_field ?></a></li>
 					<li><a data-toggle="tab" href="#plots"><?php echo $tab_plots ?></a></li>
 					<li><a data-toggle="tab" href="#billet"><?php echo $tab_billet ?></a></li>
 					<li><a data-toggle="tab" href="#payment-method"><?php echo $tab_payment_method ?></a></li>
@@ -115,18 +123,18 @@
 							
 							<!-- Modo de Teste -->
 							<div class="form-group required">
-								<label class="col-sm-2 control-label" for=""><?php echo $entry_modo_teste ?></label>
+								<label class="col-sm-2 control-label" for=""><?php echo $entry_sandbox ?></label>
 								<div class="col-sm-10">
-									<?php if ($moip_modo_teste) { ?>
-									<label class="radio-inline"><input type="radio" name="moip_modo_teste" value="1" checked /> <?php echo $text_yes ?></label>
+									<?php if ($moip_sandbox) { ?>
+									<label class="radio-inline"><input type="radio" name="moip_sandbox" value="1" checked /> <?php echo $text_yes ?></label>
 									<?php } else { ?>
-									<label class="radio-inline"><input type="radio" name="moip_modo_teste" value="1" /> <?php echo $text_yes ?></label>
+									<label class="radio-inline"><input type="radio" name="moip_sandbox" value="1" /> <?php echo $text_yes ?></label>
 									<?php } ?>
 									
-									<?php if (!$moip_modo_teste) { ?>
-									<label class="radio-inline"><input type="radio" name="moip_modo_teste" value="0" checked /> <?php echo $text_no ?></label>
+									<?php if (!$moip_sandbox) { ?>
+									<label class="radio-inline"><input type="radio" name="moip_sandbox" value="0" checked /> <?php echo $text_no ?></label>
 									<?php } else { ?>
-									<label class="radio-inline"><input type="radio" name="moip_modo_teste" value="0" /> <?php echo $text_no ?></label>
+									<label class="radio-inline"><input type="radio" name="moip_sandbox" value="0" /> <?php echo $text_no ?></label>
 									<?php } ?>
 								</div>
 							</div>
@@ -177,7 +185,7 @@
 						</div>
 						
 						<!-- Tab Área Geográfica e Ordem -->
-						<div class="tab-pane" id="desconto">
+						<div class="tab-pane" id="discount">
 							<fieldset>
                 <legend><?php echo $text_desconto ?></legend>
                 
@@ -185,7 +193,14 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><?php echo $entry_desconto_boleto ?></label>
                   <div class="col-sm-10">
-                    <input class="form-control" name="moip_desconto_boleto" value="<?php echo $moip_desconto_boleto ?>" type="text" />
+                    <span class="input-group">
+                      <input class="form-control" name="moip_desconto_boleto" value="<?php echo $moip_desconto_boleto ?>" type="text" />
+                      <input class="form-control" name="moip_desconto_boleto_tipo" value="<?php echo $moip_desconto_boleto_tipo ?>" type="hidden" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary <?php echo ($moip_desconto_boleto_tipo == 'F') ? 'active' : '' ?>" data-type="F">$</button>
+                        <button type="button" class="btn btn-primary <?php echo ($moip_desconto_boleto_tipo == 'P') ? 'active' : '' ?>" data-type="P">%</button>
+                      </span>
+                    </span>
                   </div>
                 </div>
                 
@@ -193,7 +208,14 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><?php echo $entry_desconto_debito ?></label>
                   <div class="col-sm-10">
-                    <input class="form-control" name="moip_desconto_debito" value="<?php echo $moip_desconto_debito ?>" type="text" />
+                    <span class="input-group">
+                      <input class="form-control" name="moip_desconto_debito" value="<?php echo $moip_desconto_debito ?>" type="text" />
+                      <input class="form-control" name="moip_desconto_debito_tipo" value="<?php echo $moip_desconto_debito_tipo ?>" type="hidden" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary <?php echo ($moip_desconto_debito_tipo == 'F') ? 'active' : '' ?>" data-type="F">$</button>
+                        <button type="button" class="btn btn-primary <?php echo ($moip_desconto_debito_tipo == 'P') ? 'active' : '' ?>" data-type="P">%</button>
+                      </span>
+                    </span>
                   </div>
                 </div>
                 
@@ -201,7 +223,14 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><?php echo $entry_desconto_cartao ?></label>
                   <div class="col-sm-10">
-                    <input class="form-control" name="moip_desconto_cartao" value="<?php echo $moip_desconto_cartao ?>" type="text" />
+                    <span class="input-group">
+                      <input class="form-control" name="moip_desconto_cartao" value="<?php echo $moip_desconto_cartao ?>" type="text" />
+                      <input class="form-control" name="moip_desconto_cartao_tipo" value="<?php echo $moip_desconto_cartao_tipo ?>" type="hidden" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary <?php echo ($moip_desconto_cartao_tipo == 'F') ? 'active' : '' ?>" data-type="F">$</button>
+                        <button type="button" class="btn btn-primary <?php echo ($moip_desconto_cartao_tipo == 'P') ? 'active' : '' ?>" data-type="P">%</button>
+                      </span>
+                    </span>
                   </div>
                 </div>
               </fieldset>
@@ -213,7 +242,14 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><?php echo $entry_acrescimo_boleto ?></label>
                   <div class="col-sm-10">
-                    <input class="form-control" name="moip_acrescimo_boleto" value="<?php echo $moip_acrescimo_boleto ?>" type="text" />
+                    <span class="input-group">
+                      <input class="form-control" name="moip_acrescimo_boleto" value="<?php echo $moip_acrescimo_boleto ?>" type="text" />
+                      <input class="form-control" name="moip_acrescimo_boleto_tipo" value="<?php echo $moip_acrescimo_boleto_tipo ?>" type="hidden" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary <?php echo ($moip_acrescimo_boleto_tipo == 'F') ? 'active' : '' ?>" data-type="F">$</button>
+                        <button type="button" class="btn btn-primary <?php echo ($moip_acrescimo_boleto_tipo == 'P') ? 'active' : '' ?>" data-type="P">%</button>
+                      </span>
+                    </span>
                   </div>
                 </div>
                 
@@ -221,7 +257,14 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><?php echo $entry_acrescimo_debito ?></label>
                   <div class="col-sm-10">
-                    <input class="form-control" name="moip_acrescimo_debito" value="<?php echo $moip_acrescimo_debito ?>" type="text" />
+                    <span class="input-group">
+                      <input class="form-control" name="moip_acrescimo_debito" value="<?php echo $moip_acrescimo_debito ?>" type="text" />
+                      <input class="form-control" name="moip_acrescimo_debito_tipo" value="<?php echo $moip_acrescimo_debito_tipo ?>" type="hidden" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary <?php echo ($moip_acrescimo_debito_tipo == 'F') ? 'active' : '' ?>" data-type="F">$</button>
+                        <button type="button" class="btn btn-primary <?php echo ($moip_acrescimo_debito_tipo == 'P') ? 'active' : '' ?>" data-type="P">%</button>
+                      </span>
+                    </span>
                   </div>
                 </div>
                 
@@ -229,7 +272,14 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><?php echo $entry_acrescimo_cartao ?></label>
                   <div class="col-sm-10">
-                    <input class="form-control" name="moip_acrescimo_cartao" value="<?php echo $moip_acrescimo_cartao ?>" type="text" />
+                    <span class="input-group">
+                      <input class="form-control" name="moip_acrescimo_cartao" value="<?php echo $moip_acrescimo_cartao ?>" type="text" />
+                      <input class="form-control" name="moip_acrescimo_cartao_tipo" value="<?php echo $moip_acrescimo_cartao_tipo ?>" type="hidden" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary <?php echo ($moip_acrescimo_cartao_tipo == 'F') ? 'active' : '' ?>" data-type="F">$</button>
+                        <button type="button" class="btn btn-primary <?php echo ($moip_acrescimo_cartao_tipo == 'P') ? 'active' : '' ?>" data-type="P">%</button>
+                      </span>
+                    </span>
                   </div>
                 </div>
               </fieldset>
@@ -383,6 +433,70 @@
 							</div>							
 						</div>
 						
+            <!-- Tab Custom Field -->
+            <div class="tab-pane" id="custom-field">
+              <div class="form-group required">
+                <label class="control-label col-sm-2"><?php echo $entry_cpf ?></label>
+                <div class="col-sm-10">
+                  <select name="moip_cpf" class="form-control">
+                    <?php foreach($custom_fields as $custom_field) { ?>
+                      <?php if ($custom_field['custom_field_id'] == $moip_cpf) { ?>
+                      <option value="<?php echo $custom_field['custom_field_id'] ?>" selected><?php echo $custom_field['name'] ?></option>
+                      <?php } else { ?>
+                      <option value="<?php echo $custom_field['custom_field_id'] ?>"><?php echo $custom_field['name'] ?></option>
+                      <?php } ?>
+                    <?php } ?>
+                  </select>
+                  <?php if ($error_cpf) { ?>
+                  <span class="text-danger"><?php echo $error_cpf ?></span>
+                  <?php } ?>
+                </div>
+              </div>
+              
+              <div class="form-group required">
+                <label class="control-label col-sm-2"><?php echo $entry_data_nascimento ?></label>
+                <div class="col-sm-10">
+                  <select name="moip_data_nascimento" class="form-control">
+                    <?php foreach($custom_fields as $custom_field) { ?>
+                      <?php if ($custom_field['custom_field_id'] == $moip_data_nascimento) { ?>
+                      <option value="<?php echo $custom_field['custom_field_id'] ?>" selected><?php echo $custom_field['name'] ?></option>
+                      <?php } else { ?>
+                      <option value="<?php echo $custom_field['custom_field_id'] ?>"><?php echo $custom_field['name'] ?></option>
+                      <?php } ?>
+                    <?php } ?>
+                  </select>
+                  <?php if ($error_data_nascimento) { ?>
+                  <span class="text-danger"><?php echo $error_data_nascimento ?></span>
+                  <?php } ?>
+                </div>
+              </div>
+              
+              <div class="form-group required">
+                <label class="control-label col-sm-2"><?php echo $entry_endereco_numero ?></label>
+                <div class="col-sm-10">
+                  <select name="moip_endereco_numero" class="form-control">
+                    <?php foreach($custom_fields as $custom_field) { ?>
+                      <?php if ($custom_field['custom_field_id'] == $moip_endereco_numero) { ?>
+                      <option value="<?php echo $custom_field['custom_field_id'] ?>" selected><?php echo $custom_field['name'] ?></option>
+                      <?php } else { ?>
+                      <option value="<?php echo $custom_field['custom_field_id'] ?>"><?php echo $custom_field['name'] ?></option>
+                      <?php } ?>
+                    <?php } ?>
+                  </select>
+                  <?php if ($error_endereco_numero) { ?>
+                  <span class="text-danger"><?php echo $error_endereco_numero ?></span>
+                  <?php } ?>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                  <a href="<?php echo $link_custom_field ?>" target="_blank" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                  <button type="button" class="btn btn-primary btn-custom-field-refresh" data-loading-text="<?php echo $text_loading ?>"><i class="fa fa-refresh"></i></button>
+                </div>
+              </div>
+            </div>
+            
 						<!-- Tab Parcelas -->
 						<div class="tab-pane" id="plots">
             
@@ -505,7 +619,7 @@
 								<div class="col-sm-10">
                   <input type="hidden" name="moip_boleto_logo" id="moip_boleto_logo" value="<?php echo $moip_boleto_logo ?>" />
                   <a data-toggle="image" id="boleto_logo">
-                    <img src="<?php echo $moip_boleto_logo ?>" />
+                    <img src="<?php echo ($moip_boleto_logo) ? $moip_boleto_logo : $text_logo ?>" />
                   </a>
 								</div>
 							</div>
@@ -582,19 +696,15 @@
 </div>
 
 <script type="text/javascript"><!--
+  $('button[data-type]').click(function(){
+    $(this).parent().find('button').removeClass('active');
+    $(this).addClass('active');
+    $(this).parents('.input-group').find('input[name$="tipo"]').val($(this).attr('data-type'));
+  });
+//--></script>
+
+<script type="text/javascript"><!--
 	$(function(){
-    $('#plots .btn-fixo').click(function(){
-      $(this).parent().find('button').removeClass('active');
-      $(this).parents('div.input-group').find('input[type="hidden"]').val('F');
-      $(this).addClass('active');
-    });
-    
-    $('#plots .btn-porcento').click(function(){
-      $(this).parent().find('button').removeClass('active');
-      $(this).parents('div.input-group').find('input[type="hidden"]').val('P');
-      $(this).addClass('active');
-    });
-    
     var plot_row = '<?php echo $plot_row ?>';
     
     $('#add-parcela').click(function(){
@@ -654,6 +764,29 @@
   $('#desfazer-parcela').click(function(){
     $('#plots table tbody tr:last').remove();
   });
+//--></script>
+
+<script type="text/javascript"><!--
+	$(function(){
+    $('.btn-custom-field-refresh').click(function(){
+      var moip_cpf = $('select[name="moip_cpf"]').val();
+      var moip_data_nascimento = $('select[name="moip_data_nascimento"]').val();
+      var moip_endereco_numero = $('select[name="moip_endereco_numero"]').val();
+      
+      $.getJSON('index.php?route=payment/moip/custom_field_refresh&token=<?php echo $token ?>', function(data){
+      
+        $('select[name="moip_cpf"], select[name="moip_data_nascimento"], select[name="moip_endereco_numero"]').empty();
+        
+        $.map(data, function(custom_field){
+          $('select[name="moip_cpf"], select[name="moip_data_nascimento"], select[name="moip_endereco_numero"]').append('<option value="' + custom_field['custom_field_id'] + '">' + custom_field['name'] + '</option>');
+        });
+        
+        $('select[name="moip_cpf"]').val(moip_cpf);
+        $('select[name="moip_data_nascimento"]').val(moip_data_nascimento);
+        $('select[name="moip_endereco_numero"]').val(moip_endereco_numero);
+      });
+    });
+	});
 //--></script>
 
 <?php echo $footer ?>

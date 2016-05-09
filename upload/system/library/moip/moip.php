@@ -10,13 +10,14 @@ class Moip {
     
     private $token;
     private $key;
-    private $test;
+    private $sandbox;
     private $debug;
     
-    public function __construct($token, $key, $test = false) {
+    public function __construct($token, $key, $sandbox = false, $debug = false) {
         $this->token = $token;
         $this->key = $key;
-        $this->test = $test;
+        $this->sandbox = $sandbox;
+        $this->debug = $debug;
     }
     
     public function Order() {
@@ -31,20 +32,16 @@ class Moip {
         return $this->token;
     }
     
+    public function setModeSanbox($mode) {
+        $this->sandbox = $mode;
+    }
+    
     public function getKey() {
         return $this->key;
     }
     
-    public function getTest() {
-        return $this->test;
-    }
-    
-    public function setModeTest($mode) {
-        $this->test = $mode;
-    }
-    
-    public function getModeTest() {
-        return $this->test;
+    public function isSandbox() {
+        return ($this->sandbox) ? true : false;
     }
     
     public function setDebug($debug) {

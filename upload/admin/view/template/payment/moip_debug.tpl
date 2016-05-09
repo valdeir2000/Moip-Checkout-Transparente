@@ -5,7 +5,7 @@
   <div class="page-header">
     <div class="container-fluid">
       
-      <!-- Título da Página -->
+      <!-- TÃ­tulo da PÃ¡gina -->
       <h1><?php echo $heading_title_debug ?></h1>
       
       <!-- Sub-links -->
@@ -15,7 +15,7 @@
         <?php endforeach ?>
       </ul>
       
-      <!-- Botões do topo -->
+      <!-- BotÃµes do topo -->
       <div class="pull-right">
         <?php if ($moip_debug_status): ?>
         <button class="btn btn-success active" data-toggle="tooltip" title="<?php echo $button_deactivate ?>" onClick="deactivate()"><i class="fa fa-power-off"></i></button>
@@ -60,7 +60,7 @@
       <!-- Body -->
       <div class="panel-body">
       
-        <!-- Informação do Playground -->
+        <!-- InformaÃ§Ã£o do Playground -->
         <div class="alert alert-info">
           <?php echo $text_debug_info ?>
           <button type="button" class="close" data-dismiss="alert">&times;</button>

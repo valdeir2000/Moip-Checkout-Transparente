@@ -21,7 +21,7 @@ class Request {
         $this->path = strtolower($path);
         $this->curl = curl_init();
         
-        if ($moip->getModeTest()) {
+        if ($moip->isSandbox()) {
             $this->url = self::ENDPOINT_SANDBOX;
         } else {
             $this->url = self::ENDPOINT_PRODUCTION;
@@ -51,6 +51,7 @@ class Request {
         curl_setopt($this->curl, CURLOPT_POST, true);
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->data);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->headers);
+        curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($this->curl, CURLOPT_SSLVERSION, 1);
         
         $response = curl_exec($this->curl);

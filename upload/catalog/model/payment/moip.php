@@ -4,120 +4,143 @@ class ModelPaymentMoip extends Model {
 		return array();
 	}
 	
-	public function captureToken($data) {
-		
-		//Verifica se está em modo de teste
-		if (!$this->config->get('moip_modo_teste')) {
-        	$action     = 'https://www.moip.com.br/ws/alpha/EnviarInstrucao/Unica';
-  		} else {
-			$action     = 'https://desenvolvedor.moip.com.br/sandbox/ws/alpha/EnviarInstrucao/Unica';
-		}
-	
-		// Inicia cURL
-		$ch = curl_init();
-
-		$header[] = "Authorization: Basic " . base64_encode($this->config->get('moip_token').':'.$this->config->get('moip_key'));
-
-		$postfields = utf8_encode('
-			<EnviarInstrucao>
-				<InstrucaoUnica TipoValidacao="Transparente">
-					<Razao>' . $this->config->get('moip_razao_pagamento') . '</Razao>
-					<Valores>
-						<Valor moeda="BRL">' . $data['amount'] . '</Valor>
-					</Valores>
-					<IdProprio>' . $data['order_id'] . '</IdProprio>
-					<Pagador>
-						<Nome>' . $data['firstname'] . ' ' . $data['lastname'] . '</Nome>
-						<Email>' . $data['email'] . '</Email>
-						<IdPagador>' . $data['customer_id'] . '</IdPagador>
-						<EnderecoCobranca>
-							<Logradouro>' . $data['address_1'] . '</Logradouro>
-							<Numero>00</Numero>
-							<Complemento>Desconhecido</Complemento>
-							<Bairro>' . $data['address_2'] . '</Bairro>
-							<Cidade>' . $data['city'] . '</Cidade>
-							<Estado>' . $data['zone'] . '</Estado>
-							<Pais>BRA</Pais>
-							<CEP>' . $data['postcode'] . '</CEP>
-							<TelefoneFixo>' . $data['telephone'] . '</TelefoneFixo>
-						</EnderecoCobranca>
-					</Pagador>
-					<Boleto>
-						<DiasExpiracao Tipo="Corridos">' . $this->config->get('moip_boleto_vencimento') . '</DiasExpiracao>
-						<Instrucao1>' . $this->config->get('moip_boleto_instrucao_1') . '</Instrucao1>
-						<Instrucao2>' . $this->config->get('moip_boleto_instrucao_2') . '</Instrucao2>
-						<Instrucao3>' . $this->config->get('moip_boleto_instrucao_3') . '</Instrucao3>
-						<URLLogo>' . $this->config->get('moip_boleto_logo') . '</URLLogo>
-					</Boleto>
-					<Mensagens>
-						<Mensagem>' . $data['comment'] . '</Mensagem>
-					</Mensagens>
-					' . $this->parcelas() . '
-				</InstrucaoUnica>
-			</EnviarInstrucao>
-		');
-		
-		// Seta opçoes e parâmetro
-		$options = array(CURLOPT_URL => $action,
-			CURLOPT_HTTPHEADER => $header,
-			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $postfields,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_SSLVERSION => 1
-		);
-		curl_setopt_array($ch, $options);
-		
-		// Executa cURL
-		$response = curl_exec($ch);
-		$curl_info = curl_getinfo($ch);
-		$curl_error = curl_error($ch);
-		
-		// Fecha coneçao cURL
-		curl_close($ch);
-		
-		// Transforma string em elemento XML
-		$xml = simplexml_load_string($response);
-		
-		if ($this->config->get('moip_debug')) {
-			$logs = new Log('moip.log');
-			$logs->write(html_entity_decode($postfields));
-			$logs->write(html_entity_decode($response));
-			$logs->write(html_entity_decode($curl_info));
-			$logs->write(html_entity_decode($curl_error));
-		}
-		
-		// Acessa XML e pega "Token de Pagamento"
-		if (isset($xml->Resposta->Erro))
-			return $xml->Resposta->Erro;
-		else
-			return $xml->Resposta->Token;
+	public function captureToken($data = array()) {
+		$Moip = new Moip\Moip(
+            $this->config->get('moip_token'),
+            $this->config->get('moip_key'),
+            $this->config->get('moip_sandbox'),
+            $this->config->get('moip_debug_status')
+        );
+        
+        $MoipOrder = $Moip->Order();
+        
+        $MoipOrder->setOwnId('PSR-Order-' . $data['order_id']);
+        $MoipOrder->setCurrency('BRL');
+        
+        if (isset($data['shipping_method'])) {
+            $MoipOrder->setShipping($data['shipping_method']['cost']*100);
+        }
+        
+        $MoipOrder->setAddition($this->calculateAddition($data['payment_code']));
+        
+        $MoipOrder->setDiscount($this->calculateDiscount($data['payment_code']));
+        
+        foreach($this->cart->getProducts() as $product) {
+            $MoipOrder->setItem(
+                $product['name'], 
+                ($product['price']*100), 
+                $product['quantity'], 
+                $this->getProductDetails($product)
+            );
+        }
+        
+        $MoipCustomer = $Moip->Customer()
+                             ->setOwnId('PSR-Customer-' . $data['customer_id'])
+                             ->setFullname(implode(' ', array($data['firstname'], $data['lastname'])))
+                             ->setEmail($data['email'])
+                             ->setBirthDate($data['custom_field'][$this->config->get('moip_data_nascimento')])
+                             ->setTaxDocument($data['custom_field'][$this->config->get('moip_cpf')])
+                             ->setPhone($data['telephone'])
+                             ->setStreet($data['payment_address_1'])
+                             ->setStreetNumber($data['payment_custom_field'][$this->config->get('moip_endereco_numero')])
+                             ->setComplement($data['payment_company'])
+                             ->setDistrict($data['payment_address_2'])
+                             ->setCity($data['payment_city'])
+                             ->setState($data['payment_zone_code'])
+                             ->setCountry($data['payment_iso_code_3'])
+                             ->setZipCode($data['payment_postcode']);
+        
+        $MoipOrder->setCustomer($MoipCustomer);
+        
+        $MoipOrder->setUrlSuccess($this->url->link('payment/moip/success', '', true));
+        $MoipOrder->setUrlError($this->url->link('payment/moip/error', '', true));
+        
+        foreach($this->config->get('moip_parcela') as $installment) {
+            
+            $discount = 0;
+            $increase = 0;
+            
+            if ($installment['desconto_tipo'] = 'F') {
+                $discount = $installment['desconto'];
+            } elseif ($installment['desconto_tipo'] == 'P') {
+                $discount = ($installment['desconto'] / 100) * $this->cart->getSubTotal();
+            }
+            
+            if ($installment['acrescimo_tipo'] = 'F') {
+                $increase = $installment['acrescimo'];
+            } elseif ($installment['acrescimo_tipo'] == 'P') {
+                $increase = ($installment['acrescimo'] / 100) * $this->cart->getSubTotal();
+            }
+            
+            $MoipOrder->setInstallments($installment['de'], $installment['para'], $discount, $increase);
+        }
+        
+        return $MoipOrder->create();
 	}
 
-	public function parcelas() {
-		$parcelas = $this->config->get('moip_parcela');
-		
-		$parcelamento  = '';
-		
-		if (!empty($parcelas)) {
-			$parcelamento .= '<Parcelamentos>';
-			
-			foreach($parcelas as $parcela) {
-				$parcelamento .= '	<Parcelamento>';
-				$parcelamento .= '		<MinimoParcelas>' . $parcela['de'] . '</MinimoParcelas>';
-				$parcelamento .= '		<MaximoParcelas>' . $parcela['para'] . '</MaximoParcelas>';
-				$parcelamento .= '		<Juros>' . $parcela['juros'] . '</Juros>';
-				$parcelamento .= '	</Parcelamento>';
-			}
-			$parcelamento .= '</Parcelamentos>';
-		}
-		
-		return $parcelamento;
-	}
-	
-	public function nasp($order_id, $order_status_id, $comment = '', $notify = false) {
-		$this->load->model('checkout/order');	
-			
-		$this->model_checkout_order->addOrderHistory($order_id, $order_status_id, $comment, $notify);
-	}
-
+	private function getProductDetails($product) {
+        $details = '';
+        
+        foreach($product['option'] as $option) {
+            $details .= $option['name'] . ': ' . $option['value'];
+            
+            if (end($product['option']) != $option) {
+                $details .= ' / ';
+            }
+        }
+        
+        return $details;
+    }
+    
+    private function calculateAddition($payment_code) {
+        if ($payment_code == 'moip_boleto' && $this->config->get('moip_acrescimo_boleto')) {
+            if ($this->config->get('moip_acrescimo_boleto_tipo') == 'P') {
+                return (($this->config->get('moip_acrescimo_boleto')/100) * $this->cart->getSubTotal()) * 100;
+            } else {
+                return ($this->config->get('moip_acrescimo_boleto')*100);
+            }
+        }
+        
+        if ($payment_code == 'moip_cartao' && $this->config->get('moip_acrescimo_cartao')) {
+            if ($this->config->get('moip_acrescimo_cartao_tipo') == 'P') {
+                return (($this->config->get('moip_acrescimo_cartao')/100) * $this->cart->getSubTotal()) * 100;
+            } else {
+                return ($this->config->get('moip_acrescimo_cartao')*100);
+            }
+        }
+        
+        if ($payment_code == 'moip_debito' && $this->config->get('moip_acrescimo_debito')) {
+            if ($this->config->get('moip_acrescimo_debito_tipo') == 'P') {
+                return (($this->config->get('moip_acrescimo_debito')/100) * $this->cart->getSubTotal()) * 100;
+            } else {
+                return ($this->config->get('moip_acrescimo_debito')*100);
+            }
+        }
+    }
+    
+    private function calculateDiscount($payment_code) {
+        if ($payment_code == 'moip_boleto' && $this->config->get('moip_desconto_boleto')) {
+            if ($this->config->get('moip_desconto_boleto_tipo') == 'P') {
+                return (($this->config->get('moip_desconto_boleto')/100) * $this->cart->getSubTotal()) * 100;
+            } else {
+                return ($this->config->get('moip_desconto_boleto')*100);
+            }
+        }
+        
+        if ($payment_code == 'moip_cartao' && $this->config->get('moip_desconto_cartao')) {
+            if ($this->config->get('moip_desconto_cartao_tipo') == 'P') {
+                return (($this->config->get('moip_desconto_cartao')/100) * $this->cart->getSubTotal()) * 100;
+            } else {
+                return ($this->config->get('moip_desconto_cartao')*100);
+            }
+        }
+        
+        if ($payment_code == 'moip_debito' && $this->config->get('moip_desconto_debito')) {
+            if ($this->config->get('moip_desconto_debito_tipo') == 'P') {
+                return (($this->config->get('moip_desconto_debito')/100) * $this->cart->getSubTotal()) * 100;
+            } else {
+                return ($this->config->get('moip_desconto_debito')*100);
+            }
+        }
+    }
 }
